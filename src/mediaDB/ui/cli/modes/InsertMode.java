@@ -1,27 +1,31 @@
-package mediaDB.ui.cli;
+package mediaDB.ui.cli.modes;
 
 import mediaDB.domain_logic.MediaTypes;
+import mediaDB.net.server.ServerEventBus;
+import mediaDB.routing.EventListener;
+import mediaDB.routing.NetworkEvent;
+import mediaDB.ui.cli.Console;
 
 import java.io.IOException;
 
 public class InsertMode {
-    EventHandlers eventHandlers;
     String mediaTypes = MediaTypes.ALL_TYPES.toString();
     InsertModeInputProcessing insertModeInputProcessing;
     String[] splitInput = null;
     String input = null;
+    EventListener<NetworkEvent> serverEventBus;
 
-    public InsertMode(EventHandlers eventHandlers) {
-        this.eventHandlers = eventHandlers;
-        this.insertModeInputProcessing = new InsertModeInputProcessing(eventHandlers);
+    public InsertMode(InsertModeInputProcessing insertModeInputProcessing, EventListener<NetworkEvent> serverEventBus) {
+        this.insertModeInputProcessing = insertModeInputProcessing;
+        this.serverEventBus = serverEventBus;
     }
 
-    //    while loop, damit mode nicht jedes mal neu ausgewählt werden muss
+//    while loop, damit mode nicht jedes mal neu ausgewählt werden muss
 //    input über console holen
 //    hier verarbeiten
 
 
-    protected void start() throws IOException {
+    public void start() throws IOException {
         System.out.println("Produzent: [Produzentenname]");
         System.out.println("Mediendatei: [Media-Typ] [Produzentenname] [kommaseparierte" +
                 "Tags, einzelnes Komma für keine] [Bitrate] [Länge]\n" +
@@ -29,9 +33,9 @@ public class InsertMode {
                 "[Interaktionstyp] [Lizenzsgeber]]");
         System.out.println("Zurück: 0");
 
-        do {
+//        do {
             getAndVerifyInput();
-        } while (!input.equals("0"));
+//        } while (!input.equals("0"));
     }
 
 //    TODO: eigene Klasse, damit Methode nicht public sein muss

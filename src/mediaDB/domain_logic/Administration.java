@@ -1,11 +1,5 @@
 package mediaDB.domain_logic;
 
-import mediaDB.observer.Observer;
-import mediaDB.tempserver.ServerToClientMessenger;
-
-import java.io.IOException;
-import java.util.*;
-
 //            case "AudioFile":
 //
 //                    case "AudioVideoFile":

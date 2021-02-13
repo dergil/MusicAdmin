@@ -2,7 +2,7 @@ package mediaDB.domain_logic;
 
 import mediaDB.domain_logic.files.InteractiveVideoFile;
 import mediaDB.simulation.RandomMediadfileInstances;
-import mediaDB.tempserver.ServerToClientMessenger;
+import mediaDB.tempserver.ToClientMessenger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ class MediaFileRepositoryTest {
     @BeforeEach
     void setUp() {
         sizeObservable = new SizeObservable();
-        mediaFileRepository = new MediaFileRepository(new ServerToClientMessenger(), sizeObservable, new TagObservable());
+        mediaFileRepository = new MediaFileRepository(new ToClientMessenger(), sizeObservable, new TagObservable());
     }
 
     @Test

@@ -2,11 +2,11 @@ package mediaDB.simulation;
 
 
 import mediaDB.domain_logic.*;
-import mediaDB.tempserver.ServerToClientMessenger;
+import mediaDB.tempserver.ToClientMessenger;
 
 public class Simulation1 {
     public static void main(String[] args){
-        ServerToClientMessenger toClient= new ServerToClientMessenger();
+        ToClientMessenger toClient= new ToClientMessenger();
         SizeObservable sizeObservable = new SizeObservable();
         TagObservable tagObservable = new TagObservable();
         MediaFileRepository mediaFileRepository  = new MediaFileRepository(toClient, sizeObservable, tagObservable);

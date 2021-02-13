@@ -4,16 +4,16 @@ import mediaDB.domain_logic.DisplayModeServer;
 import mediaDB.domain_logic.MediaFileRepository;
 import mediaDB.routing.DisplayEvent;
 import mediaDB.routing.EventListener;
-import mediaDB.tempserver.ServerToClientMessenger;
+import mediaDB.tempserver.ToClientMessenger;
 
 import java.io.IOException;
 
 public class DisplayEventListener implements EventListener<DisplayEvent> {
     DisplayModeServer displayModeServer;
     MediaFileRepository mediaFileRepository;
-    ServerToClientMessenger toClient;
+    ToClientMessenger toClient;
 
-    public DisplayEventListener(DisplayModeServer displayModeServer, MediaFileRepository mediaFileRepository, ServerToClientMessenger toClient) {
+    public DisplayEventListener(DisplayModeServer displayModeServer, MediaFileRepository mediaFileRepository, ToClientMessenger toClient) {
         this.displayModeServer = displayModeServer;
         this.mediaFileRepository = mediaFileRepository;
         this.toClient = toClient;

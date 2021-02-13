@@ -1,33 +1,35 @@
-package mediaDB.ui.cli;
+package mediaDB.ui.cli.modes;
 
 import mediaDB.domain_logic.MediaTypes;
+import mediaDB.net.server.ServerEventBus;
 import mediaDB.routing.DisplayEvent;
 import mediaDB.routing.EventHandler;
+import mediaDB.routing.EventListener;
+import mediaDB.routing.NetworkEvent;
+import mediaDB.ui.cli.Console;
+import mediaDB.ui.cli.EventHandlers;
 
 import java.io.IOException;
 
 public class DisplayMode {
-    EventHandlers eventHandlers;
+    EventListener<NetworkEvent> serverEventBus;
 //    TODO: input verifikation (2 args etc.)
     String mediaTypes = MediaTypes.ALL_TYPES.toString();
     String input;
     String[] splitInput = null;
 
-    public DisplayMode(EventHandlers eventHandlers) {
-        this.eventHandlers = eventHandlers;
+    public DisplayMode(EventListener<NetworkEvent> serverEventBus) {
+        this.serverEventBus = serverEventBus;
     }
-
-
 
     public void start() throws IOException {
         System.out.println("uploader");
         System.out.println("content [[Typ]]");
         System.out.println("tag [enthalten (i) / nicht enthalten (e)]");
         System.out.println("Zurück: 0");
-        do {
+//        do {
             getAndVerifyInput();
-        }
-            while (!input.equals("0")) ;
+//        } while (!input.equals("0")) ;
     }
 
     public void getAndVerifyInput() throws IOException {
@@ -55,19 +57,19 @@ public class DisplayMode {
             event  = new DisplayEvent(this, "content", null);
 
         }
-        eventHandlers.getDisplayEventEventHandler().handle(event);
+        serverEventBus.onMediaEvent(event);
     }
 
     private void uploaderDisplay() throws IOException {
         DisplayEvent event = new DisplayEvent(this, "uploader", null);
-        eventHandlers.getDisplayEventEventHandler().handle(event);
+        serverEventBus.onMediaEvent(event);
     }
 
     private void tagDisplay() throws IOException {
         DisplayEvent event;
         if (splitInput.length > 1 && (splitInput[1].equals("i") || splitInput[1].equals("e"))){
             event = new DisplayEvent(this, "tag", splitInput[1]);
-            eventHandlers.getDisplayEventEventHandler().handle(event);
+            serverEventBus.onMediaEvent(event);
         } else System.out.println("Syntax error.");
 
         }

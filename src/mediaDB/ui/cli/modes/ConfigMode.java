@@ -1,12 +1,13 @@
-package mediaDB.ui.cli;
+package mediaDB.ui.cli.modes;
 
-import mediaDB.domain_logic.Administration;
 import mediaDB.domain_logic.MediaFileRepository;
+import mediaDB.ui.cli.Console;
+import mediaDB.ui.cli.observer.SizeObserver;
+import mediaDB.ui.cli.observer.TagObserver;
 
 import java.io.IOException;
 
 public class ConfigMode {
-    EventHandlers eventHandlers;
     String[] splitInput = null;
     String input = null;
 //    TODO: extern initialisieren
@@ -14,19 +15,18 @@ public class ConfigMode {
     TagObserver tagObserver;
     MediaFileRepository mediaFileRepository;
 
-    public ConfigMode(EventHandlers eventHandlers, MediaFileRepository mediaFileRepository) {
-        this.eventHandlers = eventHandlers;
+    public ConfigMode(MediaFileRepository mediaFileRepository) {
         this.mediaFileRepository = mediaFileRepository;
     }
 
-    protected void start() throws IOException {
+    public void start() throws IOException {
         System.out.println("Classes: SizeObserver, TagObserver");
         System.out.println("add [class name]");
         System.out.println("remove [class name]");
         System.out.println("Zurück: 0");
-        do {
+//        do {
             getAndVerifyInput();
-        } while (!input.equals("0"));
+//        } while (!input.equals("0"));
     }
 
     private void getAndVerifyInput() throws IOException {

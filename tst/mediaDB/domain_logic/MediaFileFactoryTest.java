@@ -1,7 +1,7 @@
 package mediaDB.domain_logic;
 
 import mediaDB.MediaTypesTest;
-import mediaDB.tempserver.ServerToClientMessenger;
+import mediaDB.tempserver.ToClientMessenger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,13 +10,16 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import static org.mockito.Mockito.mock;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
+//TODO: isolieren, damit es keine integration tests sind
 class MediaFileFactoryTest {
     MediaFileRepository mediaFileRepository;
     MediaFileFactory mediaFileFactory;
-    AddressRepository addressRepository;
+    AddressRepository addressRepository = mock(AddressRepository.class);
      int samplingRate = 300;
      int width = 400;
      int height = 500;
@@ -33,8 +36,9 @@ class MediaFileFactoryTest {
 
     @BeforeEach
     void setUp() {
-        mediaFileRepository = new MediaFileRepository(new ServerToClientMessenger(), new SizeObservable(), new TagObservable());
+        mediaFileRepository = new MediaFileRepository(new ToClientMessenger(), new SizeObservable(), new TagObservable());
         mediaFileFactory = new MediaFileFactory(mediaFileRepository, addressRepository);
+        when(addressRepository.nextAddress()).thenReturn("1");
         al.add(Tag.Animal);
     }
 

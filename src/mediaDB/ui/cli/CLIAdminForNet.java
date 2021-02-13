@@ -4,25 +4,24 @@ import mediaDB.ui.cli.modes.*;
 
 import java.io.IOException;
 
-public class CLIAdmin {
+public class CLIAdminForNet {
     InsertMode insertMode;
     DisplayMode displayMode;
     DeletionMode deleteMode;
     ChangeMode changeMode;
-    ConfigMode configMode;
 
-    public CLIAdmin(InsertMode insertMode, DisplayMode displayMode, DeletionMode deleteMode, ChangeMode changeMode, ConfigMode configMode) {
+
+    public CLIAdminForNet(InsertMode insertMode, DisplayMode displayMode, DeletionMode deleteMode, ChangeMode changeMode) {
         this.insertMode = insertMode;
         this.displayMode = displayMode;
         this.deleteMode = deleteMode;
         this.changeMode = changeMode;
-        this.configMode = configMode;
     }
 
     public void start() throws IOException {
-        Console.greeting();
+//        Console.greeting();
         String input;
-        while (true){
+//        while (true){
             input = Console.getMode();
             String firstChar = String.valueOf(input.charAt(0));
             if (firstChar.equals(":"))
@@ -30,7 +29,7 @@ public class CLIAdmin {
             else if (firstChar.equals("0"))
                 System.exit(0);
             else System.out.println("Unknown command");
-        }
+//        }
     }
 
     private void modes(String mode) throws IOException {
@@ -50,9 +49,6 @@ public class CLIAdmin {
 //            case ":p":
 //                Console.persistenceMode();
 //                break;
-            case ":config":
-                configMode.start();
-                break;
             default:
                 System.out.println("Unknown mode.");
                 break;
@@ -60,4 +56,3 @@ public class CLIAdmin {
     }
 
 }
-

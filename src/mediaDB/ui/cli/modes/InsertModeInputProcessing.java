@@ -1,15 +1,15 @@
 
-package mediaDB.ui.cli;
+package mediaDB.ui.cli.modes;
 
+import mediaDB.net.server.ServerEventBus;
 import mediaDB.routing.*;
 import mediaDB.ui.cli.event_creation.*;
 
 import java.io.IOException;
 
 public class InsertModeInputProcessing {
-    EventHandlers eventHandlers;
-
-//    EventHandler<AudioEvent> audioEventHandler;
+    EventListener<NetworkEvent> serverEventBus;
+    //    EventHandler<AudioEvent> audioEventHandler;
 //    EventHandler<AudioVideoEvent> audioVideoEventHandler;
 //    EventHandler<InteractiveVideoEvent> interactiveVideoEventHandler;
 //    EventHandler<LicensedAudioEvent> licensedAudioEventHandler;
@@ -18,58 +18,59 @@ public class InsertModeInputProcessing {
 //
 //    EventHandler<ProducerEvent> producerEventEventHandler;
 
-    public InsertModeInputProcessing(EventHandlers eventHandlers) {
-        this.eventHandlers = eventHandlers;
+
+    public InsertModeInputProcessing(EventListener<NetworkEvent> serverEventBus) {
+        this.serverEventBus = serverEventBus;
     }
 
-    protected void mediaFile(String[] input) throws IOException {
+    public void mediaFile(String[] input) throws IOException {
         switch (input[0]) {
             case "Audio":
                 CreateAudioEvent createAudioEvent = new CreateAudioEvent();
                 AudioEvent audioEvent = createAudioEvent.process(input);
 //                audioEventHandler.handle(audioEvent);
-                eventHandlers.getAudioEventHandler().handle(audioEvent);
+                serverEventBus.onMediaEvent(audioEvent);
                 break;
             case "AudioVideo":
                 CreateAudioVideoEvent createAudioVideoEvent = new CreateAudioVideoEvent();
                 AudioVideoEvent audioVideoEvent = createAudioVideoEvent.process(input);
 //                audioVideoEventHandler.handle(audioVideoEvent);
-                eventHandlers.getAudioVideoEventHandler().handle(audioVideoEvent);
+                serverEventBus.onMediaEvent(audioVideoEvent);
                 break;
             case "InteractiveVideo":
                 CreateInteractiveVideoEvent createInteractiveVideoEvent = new CreateInteractiveVideoEvent();
                 InteractiveVideoEvent interactiveVideoEvent = createInteractiveVideoEvent.process(input);
 //                interactiveVideoEventHandler.handle(interactiveVideoEvent);
-                eventHandlers.getInteractiveVideoEventHandler().handle(interactiveVideoEvent);
+                serverEventBus.onMediaEvent(interactiveVideoEvent);
                 break;
             case "LicensedAudio":
                 CreateLicensedAudioEvent createLicensedAudioEvent = new CreateLicensedAudioEvent();
                 LicensedAudioEvent licensedAudioEvent = createLicensedAudioEvent.process(input);
 //                licensedAudioEventHandler.handle(licensedAudioEvent);
-                eventHandlers.getLicensedAudioEventHandler().handle(licensedAudioEvent);
+                serverEventBus.onMediaEvent(licensedAudioEvent);
                 break;
             case "LicensedAudioVideo":
                 CreateLicensedAudioVideoEvent createLicensedAudioVideoEvent = new CreateLicensedAudioVideoEvent();
                 LicensedAudioVideoEvent licensedAudioVideoEvent = createLicensedAudioVideoEvent.process(input);
 //                licensedAudioVideoEventHandler.handle(licensedAudioVideoEvent);
-                eventHandlers.getLicensedAudioVideoEventHandler().handle(licensedAudioVideoEvent);
+                serverEventBus.onMediaEvent(licensedAudioVideoEvent);
                 break;
             case "LicensedVideo":
                 CreateLicensedVideoEvent createLicensedVideoEvent = new CreateLicensedVideoEvent();
                 LicensedVideoEvent licensedVideoEvent = createLicensedVideoEvent.process(input);
 //                licensedVideoEventHandler.handle(licensedVideoEvent);
-                eventHandlers.getLicensedVideoEventHandler().handle(licensedVideoEvent);
+                serverEventBus.onMediaEvent(licensedVideoEvent);
                 break;
             default:
                 throw new IllegalArgumentException("Unrecognized media file type");
         }
     }
 
-    protected void producer(String name) throws IOException {
+    public void producer(String name) throws IOException {
         CreateProducerEvent createProducerEvent = new CreateProducerEvent();
         ProducerEvent producerEvent = createProducerEvent.process(name, "add");
 //        producerEventEventHandler.handle(producerEvent);
-        eventHandlers.getProducerEventEventHandler().handle(producerEvent);
+        serverEventBus.onMediaEvent(producerEvent);
     }
 
 //    public void setAudioEventHandler(EventHandler<AudioEvent> audioEventHandler) {

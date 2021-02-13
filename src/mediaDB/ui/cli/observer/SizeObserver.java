@@ -1,4 +1,4 @@
-package mediaDB.ui.cli;
+package mediaDB.ui.cli.observer;
 
 import mediaDB.domain_logic.MediaFileRepository;
 import mediaDB.domain_logic.SizeObservable;

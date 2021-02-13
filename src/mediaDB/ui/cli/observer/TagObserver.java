@@ -1,4 +1,4 @@
-package mediaDB.ui.cli;
+package mediaDB.ui.cli.observer;
 
 import mediaDB.domain_logic.Tag;
 import mediaDB.domain_logic.TagObservable;

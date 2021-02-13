@@ -3,7 +3,7 @@ package mediaDB.domain_logic;
 import mediaDB.domain_logic.file_interfaces.Content;
 import mediaDB.domain_logic.file_interfaces.MediaContent;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
-import mediaDB.tempserver.ServerToClientMessenger;
+import mediaDB.tempserver.ToClientMessenger;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -12,13 +12,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class MediaFileRepository {
-    ServerToClientMessenger toClient;
+    ToClientMessenger toClient;
 //    TODO: nullpointer, when MAX_CAPACITY is set via constructor
     private SizeObservable sizeObservable;
     private TagObservable tagObservable;
     List<Uploadable> mediaFiles = Collections.synchronizedList(new ArrayList<>());
 
-    public MediaFileRepository(ServerToClientMessenger toClient, SizeObservable sizeObservable, TagObservable tagObservable) {
+    public MediaFileRepository(ToClientMessenger toClient, SizeObservable sizeObservable, TagObservable tagObservable) {
         this.toClient = toClient;
         this.sizeObservable = sizeObservable;
         this.tagObservable = tagObservable;

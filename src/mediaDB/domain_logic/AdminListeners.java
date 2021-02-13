@@ -1,11 +1,5 @@
 package mediaDB.domain_logic;
 
-import mediaDB.tempserver.ServerToClientMessenger;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.Duration;
-
 public class AdminListeners {
 //    Administration administration;
 //    MediaFileRepository mediaFileRepository;

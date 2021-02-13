@@ -1,24 +1,5 @@
 package mediaDB.ui.cli;
 
-import mediaDB.ExampleInput;
-import mediaDB.PreliminaryEventSetup;
-import mediaDB.domain_logic.Administration;
-import mediaDB.domain_logic.MediaFileRepository;
-import mediaDB.domain_logic.SizeObservable;
-import mediaDB.domain_logic.TagObservable;
-import mediaDB.tempserver.ServerToClientMessenger;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import static org.mockito.Mockito.*;
-
 class DisplayModeTest {
 //    ByteArrayInputStream testIn;
 //

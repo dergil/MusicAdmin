@@ -1,19 +1,19 @@
+package mediaDB.net.server;
+
 import mediaDB.domain_logic.*;
 import mediaDB.domain_logic.listener.*;
+import mediaDB.net.server.Server;
 import mediaDB.net.server.ServerEventBus;
 import mediaDB.tempserver.ToClientMessenger;
-import mediaDB.ui.cli.*;
-import mediaDB.ui.cli.modes.*;
-import mediaDB.ui.cli.observer.SizeObserver;
-import mediaDB.ui.cli.observer.TagObserver;
 
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-public class App {
-
-
-    public static void main(String[] args) throws IOException {
-//        Server
+public class StartServer {
+//TODO: ToClientMessenger only works for most recently added server (not fixed yet, bc not a requirement)
+//    I could set ToClient in while loop
+    public static void main(String[] args) {
         ToClientMessenger toClient= new ToClientMessenger();
         SizeObservable sizeObservable = new SizeObservable();
         TagObservable tagObservable = new TagObservable();
@@ -45,27 +45,18 @@ public class App {
         serverEventBus.register(displayEventListener);
         serverEventBus.register(stringEventListener);
 
-
-//        Client
-        InsertModeInputProcessing insertModeInputProcessing = new InsertModeInputProcessing(serverEventBus);
-        InsertMode insertMode = new InsertMode(insertModeInputProcessing, serverEventBus);
-        DisplayMode displayMode = new DisplayMode(serverEventBus);
-        DeletionMode deletionMode = new DeletionMode(serverEventBus);
-        ChangeMode changeMode = new ChangeMode(serverEventBus);
-        ConfigMode configMode = new ConfigMode(mediaFileRepository);
-        CLIAdmin cliAdmin = new CLIAdmin(insertMode, displayMode, deletionMode, changeMode, configMode);
-//        Observer
-        SizeObserver sizeObserver = new SizeObserver(sizeObservable);
-        sizeObservable.register(sizeObserver);
-        TagObserver tagObserver = new TagObserver(tagObservable);
-        tagObservable.register(tagObserver);
-
-        cliAdmin.start();
-
-
+        try (ServerSocket ss = new ServerSocket(7777);) {
+//            server.executeSession(); blocks; unblocks after Excpetion in Server class, which exits while loop there
+//            reason: everything has to run on a single thread
+            while (true){
+                Socket socket = ss.accept();
+                Server server = new Server(socket, serverEventBus, toClient);
+                server.executeSession();
+                System.out.println("Instruction after server.executeSession();");
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
-
-
-
 
 }

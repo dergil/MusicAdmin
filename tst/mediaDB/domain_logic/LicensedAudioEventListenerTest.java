@@ -4,7 +4,7 @@ import mediaDB.EventFactory;
 import mediaDB.MediaTypesTest;
 import mediaDB.domain_logic.listener.LicensedAudioEventListener;
 import mediaDB.routing.LicensedAudioEvent;
-import mediaDB.tempserver.ServerToClientMessenger;
+import mediaDB.tempserver.ToClientMessenger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +22,7 @@ class LicensedAudioEventListenerTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        ServerToClientMessenger toClient= new ServerToClientMessenger();
+        ToClientMessenger toClient= new ToClientMessenger();
         sizeObservable = new SizeObservable();
         TagObservable tagObservable = new TagObservable();
         mediaFileRepository  = new MediaFileRepository(toClient, sizeObservable, tagObservable);

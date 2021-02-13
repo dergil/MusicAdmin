@@ -1,24 +1,29 @@
-package mediaDB.ui.cli;
+package mediaDB.ui.cli.modes;
 
+import mediaDB.net.server.ServerEventBus;
+import mediaDB.routing.EventListener;
+import mediaDB.routing.NetworkEvent;
 import mediaDB.routing.StringEvent;
+import mediaDB.ui.cli.Console;
+import mediaDB.ui.cli.EventHandlers;
 
 import java.io.IOException;
 
 public class ChangeMode {
-    EventHandlers eventHandlers;
     String[] splitInput = null;
     String input = null;
+    EventListener<NetworkEvent> serverEventBus;
 
-    public ChangeMode(EventHandlers eventHandlers) {
-        this.eventHandlers = eventHandlers;
+    public ChangeMode(EventListener<NetworkEvent> serverEventBus) {
+        this.serverEventBus = serverEventBus;
     }
 
-    protected void start() throws IOException {
+    public void start() throws IOException {
         System.out.println("[Produzentenname]");
         System.out.println("Zurück: 0");
-        do {
+//        do {
             getAndVerifyInput();
-        } while (!input.equals("0"));
+//        } while (!input.equals("0"));
     }
 
     private void getAndVerifyInput() throws IOException {
@@ -37,6 +42,6 @@ public class ChangeMode {
 
     private void address() throws IOException {
         StringEvent stringEvent = new StringEvent(this, "Change", "address", splitInput[0]);
-        eventHandlers.getStringEventEventHandler().handle(stringEvent);
+        serverEventBus.onMediaEvent(stringEvent);
     }
 }
