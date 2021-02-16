@@ -1,8 +1,7 @@
 package mediaDB.ui.cli.event_creation;
 
 import mediaDB.domain_logic.Tag;
-import mediaDB.routing.AudioVideoEvent;
-import mediaDB.routing.LicensedVideoEvent;
+import mediaDB.routing.events.files.LicensedVideoEvent;
 import mediaDB.ui.cli.ExtractTags;
 
 import java.time.Duration;

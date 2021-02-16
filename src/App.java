@@ -1,7 +1,11 @@
+import mediaDB.IO.Deserialize;
+import mediaDB.IO.DeserializeDomainContent;
+import mediaDB.IO.RandomAccess;
+import mediaDB.IO.Serialize;
 import mediaDB.domain_logic.*;
 import mediaDB.domain_logic.listener.*;
 import mediaDB.net.server.ServerEventBus;
-import mediaDB.tempserver.ToClientMessenger;
+import mediaDB.net.server.ToClientMessenger;
 import mediaDB.ui.cli.*;
 import mediaDB.ui.cli.modes.*;
 import mediaDB.ui.cli.observer.SizeObserver;
@@ -12,7 +16,7 @@ import java.io.IOException;
 public class App {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
 //        Server
         ToClientMessenger toClient= new ToClientMessenger();
         SizeObservable sizeObservable = new SizeObservable();
@@ -53,7 +57,12 @@ public class App {
         DeletionMode deletionMode = new DeletionMode(serverEventBus);
         ChangeMode changeMode = new ChangeMode(serverEventBus);
         ConfigMode configMode = new ConfigMode(mediaFileRepository);
-        CLIAdmin cliAdmin = new CLIAdmin(insertMode, displayMode, deletionMode, changeMode, configMode);
+        Serialize serialize = new Serialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository);
+        DeserializeDomainContent deserializeDomainContent = new DeserializeDomainContent();
+        Deserialize deserialize = new Deserialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository, deserializeDomainContent);
+        RandomAccess randomAccess = new RandomAccess();
+        PersistenceMode persistenceMode = new PersistenceMode(serverEventBus, mediaFileRepository, serialize, deserialize, deserializeDomainContent, randomAccess);
+        CLIAdmin cliAdmin = new CLIAdmin(insertMode, displayMode, deletionMode, changeMode, configMode, persistenceMode);
 //        Observer
         SizeObserver sizeObserver = new SizeObserver(sizeObservable);
         sizeObservable.register(sizeObserver);

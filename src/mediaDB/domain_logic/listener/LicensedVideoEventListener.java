@@ -3,7 +3,7 @@ package mediaDB.domain_logic.listener;
 import mediaDB.domain_logic.*;
 import mediaDB.domain_logic.Uploader;
 import mediaDB.routing.EventListener;
-import mediaDB.routing.LicensedVideoEvent;
+import mediaDB.routing.events.files.LicensedVideoEvent;
 
 import java.io.IOException;
 import java.math.BigDecimal;

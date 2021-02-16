@@ -1,13 +1,10 @@
 package mediaDB.ui.cli.modes;
 
 import mediaDB.domain_logic.MediaTypes;
-import mediaDB.net.server.ServerEventBus;
-import mediaDB.routing.DisplayEvent;
-import mediaDB.routing.EventHandler;
+import mediaDB.routing.events.misc.DisplayEvent;
 import mediaDB.routing.EventListener;
 import mediaDB.routing.NetworkEvent;
 import mediaDB.ui.cli.Console;
-import mediaDB.ui.cli.EventHandlers;
 
 import java.io.IOException;
 

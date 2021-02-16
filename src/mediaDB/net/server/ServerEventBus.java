@@ -1,15 +1,15 @@
 package mediaDB.net.server;
 
 import mediaDB.routing.*;
+import mediaDB.routing.events.misc.ServerResponseEvent;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ServerEventBus implements EventListener<NetworkEvent>{
     List<EventListener<NetworkEvent>> listeners = new LinkedList<>();
-    ObjectOutputStream out;
+//    ObjectOutputStream out;
     ServerResponseEvent endEvent = new ServerResponseEvent(this, "End");
 
     @Override
@@ -21,17 +21,17 @@ public class ServerEventBus implements EventListener<NetworkEvent>{
         listeners.add(eventListener);
     }
 
-    public void setOut(ObjectOutputStream out) {
-        this.out = out;
-    }
+//    public void setOut(ObjectOutputStream out) {
+//        this.out = out;
+//    }
 
-    public ServerResponseEvent getEndEvent() {
-        return endEvent;
-    }
+//    public ServerResponseEvent getEndEvent() {
+//        return endEvent;
+//    }
 
-    public void sendResponse(String response) throws IOException {
-        out.writeObject(new ServerResponseEvent(this, response));
-    }
+//    public void sendResponse(String response) throws IOException {
+//        out.writeObject(new ServerResponseEvent(this, response));
+//    }
 
     @Override
     public void onMediaEvent(NetworkEvent event) throws IOException {

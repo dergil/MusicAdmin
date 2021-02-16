@@ -34,7 +34,8 @@ public class GenerateDisplayContent {
     }
 
     private String buildFromList(List<Uploadable> list) throws IOException {
-        mediaFileRepository.incrementAccessCountForList(list);
+//        TODO: soll hier incremented werden? ich glaube nicht, siehe simulation 2
+//        mediaFileRepository.incrementAccessCountForList(list);
 //        Content, Uploadable
         StringBuilder builder = new StringBuilder();
         for (Uploadable uploadable: list) {

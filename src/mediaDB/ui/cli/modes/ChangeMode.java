@@ -1,11 +1,9 @@
 package mediaDB.ui.cli.modes;
 
-import mediaDB.net.server.ServerEventBus;
 import mediaDB.routing.EventListener;
 import mediaDB.routing.NetworkEvent;
-import mediaDB.routing.StringEvent;
+import mediaDB.routing.events.misc.StringEvent;
 import mediaDB.ui.cli.Console;
-import mediaDB.ui.cli.EventHandlers;
 
 import java.io.IOException;
 

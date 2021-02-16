@@ -10,16 +10,18 @@ public class CLIAdmin {
     DeletionMode deleteMode;
     ChangeMode changeMode;
     ConfigMode configMode;
+    PersistenceMode persistenceMode;
 
-    public CLIAdmin(InsertMode insertMode, DisplayMode displayMode, DeletionMode deleteMode, ChangeMode changeMode, ConfigMode configMode) {
+    public CLIAdmin(InsertMode insertMode, DisplayMode displayMode, DeletionMode deleteMode, ChangeMode changeMode, ConfigMode configMode, PersistenceMode persistenceMode) {
         this.insertMode = insertMode;
         this.displayMode = displayMode;
         this.deleteMode = deleteMode;
         this.changeMode = changeMode;
         this.configMode = configMode;
+        this.persistenceMode = persistenceMode;
     }
 
-    public void start() throws IOException {
+    public void start() throws IOException, ClassNotFoundException {
         Console.greeting();
         String input;
         while (true){
@@ -33,7 +35,7 @@ public class CLIAdmin {
         }
     }
 
-    private void modes(String mode) throws IOException {
+    private void modes(String mode) throws IOException, ClassNotFoundException {
         switch (mode){
             case ":c":
                 insertMode.start();
@@ -47,9 +49,9 @@ public class CLIAdmin {
             case ":u":
                 changeMode.start();
                 break;
-//            case ":p":
-//                Console.persistenceMode();
-//                break;
+            case ":p":
+                persistenceMode.start();
+                break;
             case ":config":
                 configMode.start();
                 break;

@@ -2,7 +2,7 @@ package mediaDB.domain_logic;
 
 import mediaDB.EventFactory;
 import mediaDB.domain_logic.listener.AudioEventListener;
-import mediaDB.routing.AudioEvent;
+import mediaDB.routing.events.files.AudioEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

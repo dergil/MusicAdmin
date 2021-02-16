@@ -3,7 +3,7 @@ package mediaDB.domain_logic;
 import mediaDB.domain_logic.file_interfaces.Content;
 import mediaDB.domain_logic.file_interfaces.MediaContent;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
-import mediaDB.tempserver.ToClientMessenger;
+import mediaDB.net.server.ToClientMessenger;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -24,38 +24,38 @@ public class MediaFileRepository {
         this.tagObservable = tagObservable;
     }
 
-    public void create(Uploadable mediaFile){
+    public synchronized void create(Uploadable mediaFile){
         mediaFiles.add(mediaFile);
         sizeObservable.addSize(((MediaContent)mediaFile).getSize());
         tagObservable.add(((Content) mediaFile).getTags());
     }
 
-    public List<Uploadable> read(){
+    public synchronized List<Uploadable> read(){
         return mediaFiles;
     }
 
-    public void delete(Uploadable mediaFile){
+    public synchronized void delete(Uploadable mediaFile){
         mediaFiles.remove(mediaFile);
         sizeObservable.subtractSize(((MediaContent)mediaFile).getSize());
         tagObservable.remove(((Content) mediaFile).getTags());
     }
 
-    public void delete(String address){
+    public synchronized void delete(String address){
         Uploadable mediaFile = findByAddress(address);
-        mediaFiles.remove(mediaFile);
         assert mediaFile != null;
+        mediaFiles.remove(mediaFile);
         sizeObservable.subtractSize(((MediaContent)mediaFile).getSize());
         tagObservable.remove(((Content) mediaFile).getTags());
     }
 
-    protected Uploadable findByAddress(String address){
+    public synchronized Uploadable findByAddress(String address){
         for (Uploadable uploadable: mediaFiles)
             if (((Content)uploadable).getAddress().equals(address))
                 return uploadable;
         return null;
     }
 
-    protected boolean contains(String address){
+    protected synchronized boolean contains(String address){
         for (Uploadable uploadable: mediaFiles){
             if (((Content)uploadable).getAddress().equals(address))
                 return true;
@@ -63,15 +63,15 @@ public class MediaFileRepository {
         return false;
     }
 
-    public boolean capacityAvailable(BigDecimal size){
+    public synchronized boolean capacityAvailable(BigDecimal size){
         return sizeObservable.capacityAvailable(size);
     }
 
-    protected boolean contains(Uploadable uploadable){
+    protected synchronized boolean contains(Uploadable uploadable){
         return mediaFiles.contains(uploadable);
     }
 
-    public void incrementAccessCount(String address) throws IOException {
+    public synchronized void incrementAccessCount(String address) throws IOException {
         if (contains(address)){
             Uploadable file = findByAddress(address);
             Content content = ((Content)file);
@@ -81,7 +81,7 @@ public class MediaFileRepository {
     }
 
 //    TODO: call by value, call by reference? (testen)
-    public void incrementAccessCount(Uploadable file) throws IOException {
+    public synchronized void incrementAccessCount(Uploadable file) throws IOException {
         if (contains(file)){
             Content content = ((Content)file);
             content.setAccessCount(content.getAccessCount() + 1);
@@ -89,7 +89,7 @@ public class MediaFileRepository {
         else toClient.fileNotListet();
     }
 
-    protected void incrementAccessCountForList(List<Uploadable> list) throws IOException {
+    protected synchronized void incrementAccessCountForList(List<Uploadable> list) throws IOException {
         for (Uploadable uploadable : list){
             incrementAccessCount(uploadable);
         }
@@ -101,5 +101,9 @@ public class MediaFileRepository {
 
     public SizeObservable getSizeObservable() {
         return sizeObservable;
+    }
+
+    public void setMediaFiles(List<Uploadable> mediaFiles) {
+        this.mediaFiles = mediaFiles;
     }
 }

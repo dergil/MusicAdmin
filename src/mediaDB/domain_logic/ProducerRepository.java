@@ -100,6 +100,10 @@ public class ProducerRepository implements Serializable {
         return producers.size();
     }
 
+    public void setProducers(Set<Uploader> producers) {
+        this.producers = producers;
+    }
+
     @Override
     public String toString() {
         return "ProducerDB{" +

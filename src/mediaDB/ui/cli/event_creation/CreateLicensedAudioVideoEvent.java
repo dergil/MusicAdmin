@@ -1,11 +1,10 @@
 package mediaDB.ui.cli.event_creation;
 
 import mediaDB.domain_logic.Tag;
-import mediaDB.routing.LicensedAudioVideoEvent;
+import mediaDB.routing.events.files.LicensedAudioVideoEvent;
 import mediaDB.ui.cli.ExtractTags;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class CreateLicensedAudioVideoEvent {

@@ -1,9 +1,7 @@
 package mediaDB.net.server;
 
-import mediaDB.domain_logic.*;
-import mediaDB.domain_logic.listener.*;
 import mediaDB.routing.NetworkEvent;
-import mediaDB.tempserver.ToClientMessenger;
+import mediaDB.routing.events.misc.ServerResponseEvent;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,22 +20,15 @@ public class Server implements Runnable{
         this.toClientMessenger = toClientMessenger;
     }
 
-    public void executeSession() {
+    @Override
+    public void run() {
         try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
             try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-                serverEventBus.setOut(out);
-                toClientMessenger.setOut(out);
-
-                NetworkEvent receivedEvent;
-                while (true) {
-                    System.out.println("start of server while loop");
-                    receivedEvent = (NetworkEvent) in.readObject();
-                    System.out.println("event received");
-                    serverEventBus.onMediaEvent(receivedEvent);
 
 
-                    toClientMessenger.sendString(" \n");
-                }
+                executeSession(in, out);
+
+
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -46,22 +37,21 @@ public class Server implements Runnable{
         }
     }
 
+    public void executeSession(ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException {
+//                serverEventBus.setOut(out);
+        toClientMessenger.setOut(out);
 
-    @Override
-    public void run() {
-//        try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
-//            try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-//
-//
-//
-//
-//
-//            } catch (IOException | ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-            }
+        NetworkEvent receivedEvent;
+        receivedEvent = (ServerResponseEvent) in.readObject();
+        String marker = receivedEvent.getEventName();
+        while (true) {
+            System.out.println("start of server while loop");
+            receivedEvent = (NetworkEvent) in.readObject();
+            System.out.println("event received");
+            serverEventBus.onMediaEvent(receivedEvent);
 
+//                  if outputstream empty, send " \n"?
+            toClientMessenger.sendString(marker);
+        }
+    }
 }

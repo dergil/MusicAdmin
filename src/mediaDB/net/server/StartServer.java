@@ -2,17 +2,13 @@ package mediaDB.net.server;
 
 import mediaDB.domain_logic.*;
 import mediaDB.domain_logic.listener.*;
-import mediaDB.net.server.Server;
-import mediaDB.net.server.ServerEventBus;
-import mediaDB.tempserver.ToClientMessenger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class StartServer {
-//TODO: ToClientMessenger only works for most recently added server (not fixed yet, bc not a requirement)
-//    I could set ToClient in while loop
+//TODO: server sendet nachrichten an alle clients, zu lösen via Kommunikationsklasse? Eine art state
     public static void main(String[] args) {
         ToClientMessenger toClient= new ToClientMessenger();
         SizeObservable sizeObservable = new SizeObservable();
@@ -47,11 +43,14 @@ public class StartServer {
 
         try (ServerSocket ss = new ServerSocket(7777);) {
 //            server.executeSession(); blocks; unblocks after Excpetion in Server class, which exits while loop there
-//            reason: everything has to run on a single thread
+//            reason: server lacks multiple threads
             while (true){
+
+
                 Socket socket = ss.accept();
                 Server server = new Server(socket, serverEventBus, toClient);
-                server.executeSession();
+                System.out.println("new client@"+socket.getInetAddress()+":"+socket.getPort());
+                new Thread(server).start();
                 System.out.println("Instruction after server.executeSession();");
             }
         } catch (IOException e){

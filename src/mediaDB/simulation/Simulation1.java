@@ -2,7 +2,7 @@ package mediaDB.simulation;
 
 
 import mediaDB.domain_logic.*;
-import mediaDB.tempserver.ToClientMessenger;
+import mediaDB.net.server.ToClientMessenger;
 
 public class Simulation1 {
     public static void main(String[] args){

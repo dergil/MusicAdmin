@@ -1,8 +1,6 @@
 package mediaDB.ui.cli.event_creation;
 
-import mediaDB.routing.ProducerEvent;
-
-import java.io.StringReader;
+import mediaDB.routing.events.misc.ProducerEvent;
 
 public class CreateProducerEvent{
     public ProducerEvent process(String name, String command) {

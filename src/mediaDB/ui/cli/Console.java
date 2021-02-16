@@ -24,6 +24,7 @@ public class Console {
     }
 
     public static String  getMode(){
+        System.out.println(" ");
         System.out.println("Pick a mode:");
         System.out.println(":c - Insertion mode");
         System.out.println(":d - Deletion mode");

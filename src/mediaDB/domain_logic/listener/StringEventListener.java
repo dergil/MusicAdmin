@@ -3,7 +3,7 @@ package mediaDB.domain_logic.listener;
 import mediaDB.domain_logic.MediaFileRepository;
 import mediaDB.domain_logic.ProducerRepository;
 import mediaDB.routing.EventListener;
-import mediaDB.routing.StringEvent;
+import mediaDB.routing.events.misc.StringEvent;
 
 import java.io.IOException;
 
@@ -20,8 +20,11 @@ public class StringEventListener implements EventListener<StringEvent> {
     public void onMediaEvent(StringEvent event) throws IOException {
         switch (event.getMode()){
             case "Deletion":
-                if (event.getCommand().equals("address"))
-                    mediaFileRepository.delete(event.getOption());
+                if (event.getCommand().equals("address")){
+                    String address = event.getOption();
+                    if (mediaFileRepository.findByAddress(address) != null)
+                        mediaFileRepository.delete(address);
+                }
                 else if (event.getCommand().equals("producer"))
                     producerRepository.removeProducer(event.getOption());
                 break;

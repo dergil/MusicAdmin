@@ -1,7 +1,7 @@
 package mediaDB;
 
 import mediaDB.domain_logic.Tag;
-import mediaDB.routing.*;
+import mediaDB.routing.events.files.*;
 
 import java.math.BigDecimal;
 import java.time.Duration;

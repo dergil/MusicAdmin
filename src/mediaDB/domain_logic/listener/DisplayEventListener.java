@@ -2,11 +2,13 @@ package mediaDB.domain_logic.listener;
 
 import mediaDB.domain_logic.DisplayModeServer;
 import mediaDB.domain_logic.MediaFileRepository;
-import mediaDB.routing.DisplayEvent;
+import mediaDB.domain_logic.file_interfaces.Uploadable;
+import mediaDB.routing.events.misc.DisplayEvent;
 import mediaDB.routing.EventListener;
-import mediaDB.tempserver.ToClientMessenger;
+import mediaDB.net.server.ToClientMessenger;
 
 import java.io.IOException;
+import java.util.List;
 
 public class DisplayEventListener implements EventListener<DisplayEvent> {
     DisplayModeServer displayModeServer;
@@ -27,7 +29,7 @@ public class DisplayEventListener implements EventListener<DisplayEvent> {
                 break;
             case "content":
                 if (event.getOption() == null){
-                    toClient.sendString(mediaFileRepository.read().toString());
+                    toClient.sendString(formatList(mediaFileRepository.read()));
                 }
                 else toClient.sendString(displayModeServer.content(mediaFileRepository.read(), event.getOption()));
                 break;
@@ -44,6 +46,15 @@ public class DisplayEventListener implements EventListener<DisplayEvent> {
 
         }
 
+    }
+
+    private String  formatList(List<Uploadable> uploadableList){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Uploadable uploadable : uploadableList){
+            stringBuilder.append(uploadable.toString());
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
     }
 
     @Override

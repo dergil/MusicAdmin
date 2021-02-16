@@ -4,12 +4,13 @@ import mediaDB.domain_logic.file_interfaces.LicensedAudioVideo;
 import mediaDB.domain_logic.Tag;
 import mediaDB.domain_logic.Uploader;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Date;
 
-public class LicensedAudioVideoFile implements LicensedAudioVideo {
+public class LicensedAudioVideoFile implements LicensedAudioVideo, Serializable {
     private String fileType;
     private int samplingRate;
     private int width;
@@ -117,5 +118,25 @@ public class LicensedAudioVideoFile implements LicensedAudioVideo {
     @Override
     public Date getUploadDate() {
         return uploadDate;
+    }
+
+    @Override
+    public String toString() {
+        return "LicensedAudioVideoFile{" +
+                "fileType='" + fileType + '\'' +
+                ", samplingRate=" + samplingRate +
+                ", width=" + width +
+                ", height=" + height +
+                ", encoding='" + encoding + '\'' +
+                ", address='" + address + '\'' +
+                ", tags=" + tags +
+                ", accessCount=" + accessCount +
+                ", holder='" + holder + '\'' +
+                ", bitrate=" + bitrate +
+                ", length=" + length +
+                ", size=" + size +
+                ", uploader=" + uploader +
+                ", uploadDate=" + uploadDate +
+                '}';
     }
 }

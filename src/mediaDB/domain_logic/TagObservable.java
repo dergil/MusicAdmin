@@ -3,9 +3,10 @@ package mediaDB.domain_logic;
 import mediaDB.observer.Observable;
 import mediaDB.observer.Observer;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class TagObservable extends Observable {
+public class TagObservable extends Observable  implements Serializable {
     private List<Observer> observerList = new LinkedList<>();
     private Map<String , Integer> tagOccurences = Collections.synchronizedMap(new HashMap<>());
 
@@ -51,5 +52,18 @@ public class TagObservable extends Observable {
 
     public Map<String, Integer> getTagOccurences() {
         return tagOccurences;
+    }
+
+    public List<Observer> getObserverList() {
+        return observerList;
+    }
+
+    public void setObserverList(List<Observer> observerList) {
+        this.observerList = observerList;
+    }
+
+    public void setTagOccurences(Map<String, Integer> tagOccurences) {
+        this.tagOccurences.clear();
+        this.tagOccurences.putAll(tagOccurences);
     }
 }

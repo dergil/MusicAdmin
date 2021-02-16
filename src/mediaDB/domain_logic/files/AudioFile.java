@@ -4,12 +4,13 @@ import mediaDB.domain_logic.file_interfaces.Audio;
 import mediaDB.domain_logic.Tag;
 import mediaDB.domain_logic.Uploader;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Date;
 
-public class AudioFile implements Audio {
+public class AudioFile implements Audio, Serializable {
     private String fileType;
     private int samplingRate;
     private String encoding;
@@ -96,5 +97,22 @@ public class AudioFile implements Audio {
     @Override
     public Date getUploadDate() {
         return uploadDate;
+    }
+
+    @Override
+    public String toString() {
+        return "AudioFile{" +
+                "fileType='" + fileType + '\'' +
+                ", samplingRate=" + samplingRate +
+                ", encoding='" + encoding + '\'' +
+                ", address='" + address + '\'' +
+                ", tags=" + tags +
+                ", accessCount=" + accessCount +
+                ", bitrate=" + bitrate +
+                ", length=" + length +
+                ", size=" + size +
+                ", uploader=" + uploader +
+                ", uploadDate=" + uploadDate +
+                '}';
     }
 }

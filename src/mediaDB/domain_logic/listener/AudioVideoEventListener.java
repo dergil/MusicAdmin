@@ -2,7 +2,7 @@ package mediaDB.domain_logic.listener;
 
 import mediaDB.domain_logic.*;
 import mediaDB.domain_logic.Uploader;
-import mediaDB.routing.AudioVideoEvent;
+import mediaDB.routing.events.files.AudioVideoEvent;
 import mediaDB.routing.EventListener;
 
 import java.io.IOException;

@@ -10,8 +10,8 @@ public class AddressRepository {
     //    TODO: Thread safety?
     public String  nextAddress(){
         if (addresses.isEmpty()) {
-            addresses.add(0);
-            return "0";
+            addresses.add(1);
+            return "1";
         }
         Integer lastElement = null;
         for (Integer address : addresses) {
@@ -25,5 +25,14 @@ public class AddressRepository {
         if (addresses.size() <= oldSize)
             throw new RuntimeException("Calculated address already exists.");
         return Integer.toString(newElement);
+    }
+
+    public Set<Integer> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(Set<Integer> newAddresses) {
+        this.addresses.clear();
+        addresses.addAll(newAddresses);
     }
 }

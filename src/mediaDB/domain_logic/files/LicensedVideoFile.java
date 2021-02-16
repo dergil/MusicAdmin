@@ -4,12 +4,13 @@ import mediaDB.domain_logic.file_interfaces.LicensedVideo;
 import mediaDB.domain_logic.Tag;
 import mediaDB.domain_logic.Uploader;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Date;
 
-public class LicensedVideoFile implements LicensedVideo {
+public class LicensedVideoFile implements LicensedVideo, Serializable {
     private String fileType;
     private int width;
     private int height;
@@ -110,5 +111,24 @@ public class LicensedVideoFile implements LicensedVideo {
     @Override
     public String getEncoding() {
         return encoding;
+    }
+
+    @Override
+    public String toString() {
+        return "LicensedVideoFile{" +
+                "fileType='" + fileType + '\'' +
+                ", width=" + width +
+                ", height=" + height +
+                ", encoding='" + encoding + '\'' +
+                ", address='" + address + '\'' +
+                ", tags=" + tags +
+                ", accessCount=" + accessCount +
+                ", holder='" + holder + '\'' +
+                ", bitrate=" + bitrate +
+                ", length=" + length +
+                ", size=" + size +
+                ", uploader=" + uploader +
+                ", uploadDate=" + uploadDate +
+                '}';
     }
 }

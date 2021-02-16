@@ -1,7 +1,5 @@
 package mediaDB.ui.cli.event_creation;
 
-import mediaDB.routing.DeleteMediaEvent;
-
 public class CreateDeleteMediaEvent {
 //    DeleteMediaEvent event;
 //

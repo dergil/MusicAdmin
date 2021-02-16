@@ -2,9 +2,8 @@ package mediaDB.domain_logic.listener;
 
 import mediaDB.domain_logic.Producer;
 import mediaDB.domain_logic.ProducerRepository;
-import mediaDB.routing.EventHandler;
 import mediaDB.routing.EventListener;
-import mediaDB.routing.ProducerEvent;
+import mediaDB.routing.events.misc.ProducerEvent;
 
 import java.io.IOException;
 

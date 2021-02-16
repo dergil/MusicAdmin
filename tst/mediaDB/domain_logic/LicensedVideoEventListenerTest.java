@@ -2,7 +2,7 @@
 //
 //import mediaDB.EventFactory;
 //import mediaDB.MediaTypesTest;
-//import mediaDB.routing.LicensedVideoEvent;
+//import mediaDB.routing.events.files.LicensedVideoEvent;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //

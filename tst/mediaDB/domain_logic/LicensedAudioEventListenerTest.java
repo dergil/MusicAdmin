@@ -3,8 +3,8 @@ package mediaDB.domain_logic;
 import mediaDB.EventFactory;
 import mediaDB.MediaTypesTest;
 import mediaDB.domain_logic.listener.LicensedAudioEventListener;
-import mediaDB.routing.LicensedAudioEvent;
-import mediaDB.tempserver.ToClientMessenger;
+import mediaDB.routing.events.files.LicensedAudioEvent;
+import mediaDB.net.server.ToClientMessenger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

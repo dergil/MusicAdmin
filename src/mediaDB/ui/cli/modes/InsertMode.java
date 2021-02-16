@@ -153,6 +153,7 @@ public class InsertMode {
     }
 
     private boolean checkIfProducer() {
+//        TODO: returnt bei z.B. einzelnem Buchstaben, der in mediafiles vorkommnt, false
         return splitInput.length == 1 && !mediaTypes.contains(splitInput[0]);
     }
 

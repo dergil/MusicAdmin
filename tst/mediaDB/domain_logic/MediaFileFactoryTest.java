@@ -1,7 +1,7 @@
 package mediaDB.domain_logic;
 
 import mediaDB.MediaTypesTest;
-import mediaDB.tempserver.ToClientMessenger;
+import mediaDB.net.server.ToClientMessenger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

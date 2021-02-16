@@ -16,3 +16,7 @@ parallel
 https://github.com/google/guava event sache raussuchen, als quelle angeben
 
 access modifier am Ende überarbeiten
+
+
+toclient 2 outputs geben
+jede line hat zahl am Ende, über die die clients erfahren können, ob die Nachricht für sie bestimmt ist
