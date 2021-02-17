@@ -1,9 +1,16 @@
 package mediaDB.IO;
 
 import mediaDB.domain_logic.*;
+import mediaDB.domain_logic.observables.SizeObservable;
+import mediaDB.domain_logic.observables.TagObservable;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
-import mediaDB.observer.Observer;
+import mediaDB.domain_logic.producer.ProducerRepository;
+import mediaDB.domain_logic.producer.Uploader;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -14,6 +21,7 @@ public class Deserialize {
     ProducerRepository producerRepository;
     AddressRepository addressRepository;
     DeserializeDomainContent deserializeDomainContent;
+    ObjectInputStream ois;
 
     public Deserialize(SizeObservable sizeObservable, TagObservable tagObservable, MediaFileRepository mediaFileRepository,
                        ProducerRepository producerRepository, AddressRepository addressRepository,
@@ -26,24 +34,29 @@ public class Deserialize {
         this.deserializeDomainContent = deserializeDomainContent;
     }
 
-    public void deserialzie(){
-        BigDecimal currentSize = deserializeDomainContent.deserializeBigDecimal(SerFilenames.CURRENTSIZE.toString());
+    public void deserialize() throws IOException {
+        ois=new ObjectInputStream(new FileInputStream(SerFilenames.CURRENTSIZE.toString()));
+        BigDecimal currentSize = deserializeDomainContent.deserializeBigDecimal(ois);
         sizeObservable.setCurrentSize(currentSize);
 
-        Map<String , Integer> stringIntegerMap = deserializeDomainContent.deserializeStringIntegerMap(SerFilenames.TAGOCCURENCES.toString());
+        ois=new ObjectInputStream(new FileInputStream(SerFilenames.TAGOCCURENCES.toString()));
+        Map<String , Integer> stringIntegerMap = deserializeDomainContent.deserializeStringIntegerMap(ois);
         tagObservable.setTagOccurences(stringIntegerMap);
 
-        List<Uploadable> uploadableList = deserializeDomainContent.deserializeUploadableList(SerFilenames.UPLOADABLELIST.toString());
+        ois=new ObjectInputStream(new FileInputStream(SerFilenames.UPLOADABLELIST.toString()));
+        List<Uploadable> uploadableList = deserializeDomainContent.deserializeUploadableList(ois);
         for (Uploadable uploadable : uploadableList){
             mediaFileRepository.create(uploadable);
         }
 
-        ArrayList<Uploader> uploaderArrayList = deserializeDomainContent.deserializeUploaderSet(SerFilenames.PRODUCERSET.toString());
+        ois=new ObjectInputStream(new FileInputStream(SerFilenames.PRODUCERSET.toString()));
+        ArrayList<Uploader> uploaderArrayList = deserializeDomainContent.deserializeUploaderSet(ois);
         for (Uploader uploader : uploaderArrayList){
             producerRepository.addProducer(uploader);
         }
 
-        Set<Integer> integerSet = deserializeDomainContent.deserializeIntegerSet(SerFilenames.ADDRESSESSET.toString());
+        ois=new ObjectInputStream(new FileInputStream(SerFilenames.ADDRESSESSET.toString()));
+        Set<Integer> integerSet = deserializeDomainContent.deserializeIntegerSet(ois);
         addressRepository.setAddresses(integerSet);
     }
 }

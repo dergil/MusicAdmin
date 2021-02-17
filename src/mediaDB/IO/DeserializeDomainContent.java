@@ -1,12 +1,10 @@
 package mediaDB.IO;
 
-import mediaDB.domain_logic.Uploader;
+import mediaDB.domain_logic.producer.Uploader;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
-import mediaDB.observer.Observer;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,8 +13,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class DeserializeDomainContent {
-    public BigDecimal deserializeBigDecimal(String filename){
-        try (ObjectInputStream ois=new ObjectInputStream(new FileInputStream(filename))){
+    public BigDecimal deserializeBigDecimal(ObjectInputStream ois){
+//        try (ObjectInputStream ois=new ObjectInputStream(new FileInputStream(filename))){
+        try {
             return (BigDecimal)ois.readObject();
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
@@ -24,8 +23,8 @@ public class DeserializeDomainContent {
         return null;
     }
 
-    public List<Uploadable> deserializeUploadableList(String filename){
-        try (ObjectInputStream ois=new ObjectInputStream(new FileInputStream(filename))){
+    public List<Uploadable> deserializeUploadableList(ObjectInputStream ois){
+        try {
             return (List<Uploadable>)ois.readObject();
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
@@ -43,8 +42,8 @@ public class DeserializeDomainContent {
 //    }
 
 
-    public Map<String , Integer> deserializeStringIntegerMap(String filename){
-        try (ObjectInputStream ois=new ObjectInputStream(new FileInputStream(filename))){
+    public Map<String , Integer> deserializeStringIntegerMap(ObjectInputStream ois){
+        try {
             return (Map<String , Integer>)ois.readObject();
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
@@ -52,8 +51,8 @@ public class DeserializeDomainContent {
         return null;
     }
 
-    public ArrayList<Uploader> deserializeUploaderSet(String filename){
-        try (ObjectInputStream ois=new ObjectInputStream(new FileInputStream(filename))){
+    public ArrayList<Uploader> deserializeUploaderSet(ObjectInputStream ois){
+        try {
             return (ArrayList<Uploader>)ois.readObject();
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
@@ -61,8 +60,8 @@ public class DeserializeDomainContent {
         return null;
     }
 
-    public Set<Integer> deserializeIntegerSet(String filename) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+    public Set<Integer> deserializeIntegerSet(ObjectInputStream ois) {
+        try {
             return (Set<Integer>) ois.readObject();
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();

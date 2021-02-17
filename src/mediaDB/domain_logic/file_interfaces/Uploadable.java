@@ -1,6 +1,6 @@
 package mediaDB.domain_logic.file_interfaces;
 
-import mediaDB.domain_logic.Uploader;
+import mediaDB.domain_logic.producer.Uploader;
 
 import java.util.Date;
 

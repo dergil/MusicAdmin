@@ -1,5 +1,6 @@
 package mediaDB.domain_logic;
 
+import mediaDB.domain_logic.observables.SizeObservable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

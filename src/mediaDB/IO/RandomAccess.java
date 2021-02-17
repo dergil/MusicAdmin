@@ -15,12 +15,11 @@ public class RandomAccess {
 //    liste von files mit fileType, adresse, größe, offset
     RandomAccessFile randomAccessFile;
     ArrayList<SavedMediaFile> savedMediaFiles;
-    int currentOffset;
+    int currentOffset = 0;
 
-    public RandomAccess() throws FileNotFoundException {
-        randomAccessFile = new RandomAccessFile("RandomAccessFile", "rw");
-        savedMediaFiles = new ArrayList<>();
-        currentOffset = 0;
+    public RandomAccess(RandomAccessFile randomAccessFile, ArrayList<SavedMediaFile> savedMediaFiles) {
+        this.randomAccessFile = randomAccessFile;
+        this.savedMediaFiles = savedMediaFiles;
     }
 
     public void save(Uploadable uploadable) throws IOException {
@@ -28,7 +27,6 @@ public class RandomAccess {
         String address = ((Content) uploadable).getAddress();
         byte[] serializedUploadable = serialize(uploadable);
         int length = serializedUploadable.length;
-        System.out.println(length);
         SavedMediaFile savedMediaFile = new SavedMediaFile(fileType, address, length , currentOffset);
         randomAccessFile.seek(currentOffset);
         randomAccessFile.write(serializedUploadable);
@@ -70,13 +68,5 @@ public class RandomAccess {
 
     public boolean isEmpty(){
         return savedMediaFiles.isEmpty();
-    }
-
-    public RandomAccessFile getRandomAccessFile() {
-        return randomAccessFile;
-    }
-
-    public ArrayList<SavedMediaFile> getSavedMediaFiles() {
-        return savedMediaFiles;
     }
 }

@@ -1,7 +1,7 @@
 package mediaDB.domain_logic.listener;
 
-import mediaDB.domain_logic.Producer;
-import mediaDB.domain_logic.ProducerRepository;
+import mediaDB.domain_logic.producer.Producer;
+import mediaDB.domain_logic.producer.ProducerRepository;
 import mediaDB.routing.EventListener;
 import mediaDB.routing.events.misc.ProducerEvent;
 

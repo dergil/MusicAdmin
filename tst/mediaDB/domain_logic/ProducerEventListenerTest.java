@@ -1,6 +1,7 @@
 package mediaDB.domain_logic;
 
 import mediaDB.domain_logic.listener.ProducerEventListener;
+import mediaDB.domain_logic.producer.ProducerRepository;
 import mediaDB.routing.events.misc.ProducerEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,22 +1,27 @@
 package mediaDB.ui.cli.modes;
 
-import mediaDB.domain_logic.MediaTypes;
+import mediaDB.domain_logic.enums.MediaTypes;
+import mediaDB.routing.EventHandler;
 import mediaDB.routing.events.misc.DisplayEvent;
 import mediaDB.routing.EventListener;
 import mediaDB.routing.NetworkEvent;
 import mediaDB.ui.cli.Console;
+import mediaDB.ui.cli.EventFactory;
 
 import java.io.IOException;
 
-public class DisplayMode {
+public class DisplayMode implements CLIMode {
     EventListener<NetworkEvent> serverEventBus;
+    EventHandler eventHandler;
+    EventFactory eventFactory;
 //    TODO: input verifikation (2 args etc.)
     String mediaTypes = MediaTypes.ALL_TYPES.toString();
     String input;
     String[] splitInput = null;
 
-    public DisplayMode(EventListener<NetworkEvent> serverEventBus) {
-        this.serverEventBus = serverEventBus;
+    public DisplayMode(EventHandler eventHandler, EventFactory eventFactory) {
+        this.eventHandler = eventHandler;
+        this.eventFactory = eventFactory;
     }
 
     public void start() throws IOException {
@@ -29,9 +34,9 @@ public class DisplayMode {
 //        } while (!input.equals("0")) ;
     }
 
-    public void getAndVerifyInput() throws IOException {
+    private void getAndVerifyInput() throws IOException {
         input = Console.prompt("Display mode ");
-        splitInput = input.split(" ");
+      splitInput = input.split(" ");
         if (splitInput[0].equals("content")) {
             contentDisplay();
             return;
@@ -48,26 +53,31 @@ public class DisplayMode {
 
     private void contentDisplay() throws IOException {
         DisplayEvent event;
-        if (splitInput.length > 1 && mediaTypes.contains(splitInput[1])){
-            event = new DisplayEvent(this, "content", splitInput[1]);
+        if (splitInput.length > 1 && validMediaType(splitInput[1])){
+            event = eventFactory.displayEvent("content", splitInput[1]);
         } else {
-            event  = new DisplayEvent(this, "content", null);
+            event  = eventFactory.displayEvent( "content", null);
 
         }
-        serverEventBus.onMediaEvent(event);
+        eventHandler.handle(event);
     }
 
     private void uploaderDisplay() throws IOException {
-        DisplayEvent event = new DisplayEvent(this, "uploader", null);
-        serverEventBus.onMediaEvent(event);
+        DisplayEvent event = eventFactory.displayEvent( "uploader", null);
+        eventHandler.handle(event);
     }
 
     private void tagDisplay() throws IOException {
         DisplayEvent event;
         if (splitInput.length > 1 && (splitInput[1].equals("i") || splitInput[1].equals("e"))){
-            event = new DisplayEvent(this, "tag", splitInput[1]);
-            serverEventBus.onMediaEvent(event);
+            event = eventFactory.displayEvent( "tag", splitInput[1]);
+            eventHandler.handle(event);
         } else System.out.println("Syntax error.");
+    }
 
-        }
+    private boolean validMediaType(String input){
+        return input.equalsIgnoreCase("Audio") || input.equalsIgnoreCase("AudioVideo") ||
+                input.equalsIgnoreCase("InteractiveVideo") || input.equalsIgnoreCase("LicensedAudio") ||
+                input.equalsIgnoreCase("LicensedAudioVideo") || input.equalsIgnoreCase("LicensedVideo");
+    }
 }

@@ -1,6 +1,6 @@
 package mediaDB.routing.events.files;
 
-import mediaDB.domain_logic.Tag;
+import mediaDB.domain_logic.enums.Tag;
 import mediaDB.routing.NetworkEvent;
 
 import java.io.Serializable;

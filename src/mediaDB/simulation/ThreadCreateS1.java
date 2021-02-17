@@ -4,6 +4,8 @@ package mediaDB.simulation;
 import mediaDB.domain_logic.*;
 import mediaDB.domain_logic.files.InteractiveVideoFile;
 import mediaDB.domain_logic.files.LicensedAudioVideoFile;
+import mediaDB.domain_logic.producer.Producer;
+import mediaDB.domain_logic.producer.ProducerRepository;
 
 import java.util.ArrayList;
 import java.util.Random;

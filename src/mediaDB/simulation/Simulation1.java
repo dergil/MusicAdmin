@@ -2,6 +2,9 @@ package mediaDB.simulation;
 
 
 import mediaDB.domain_logic.*;
+import mediaDB.domain_logic.observables.SizeObservable;
+import mediaDB.domain_logic.observables.TagObservable;
+import mediaDB.domain_logic.producer.ProducerRepository;
 import mediaDB.net.server.ToClientMessenger;
 
 public class Simulation1 {
@@ -11,8 +14,6 @@ public class Simulation1 {
         TagObservable tagObservable = new TagObservable();
         MediaFileRepository mediaFileRepository  = new MediaFileRepository(toClient, sizeObservable, tagObservable);
         ProducerRepository producerRepository = new ProducerRepository();
-        AddressRepository addressRepository = new AddressRepository();
-        MediaFileFactory mediaFileFactory = new MediaFileFactory(mediaFileRepository, addressRepository);
 
         ThreadCreateS1 thread1 = new ThreadCreateS1(mediaFileRepository, producerRepository);
         ThreadDeleteS1 thread2 = new ThreadDeleteS1(mediaFileRepository);

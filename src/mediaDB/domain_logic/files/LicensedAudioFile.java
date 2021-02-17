@@ -1,8 +1,8 @@
 package mediaDB.domain_logic.files;
 
 import mediaDB.domain_logic.file_interfaces.LicensedAudio;
-import mediaDB.domain_logic.Tag;
-import mediaDB.domain_logic.Uploader;
+import mediaDB.domain_logic.enums.Tag;
+import mediaDB.domain_logic.producer.Uploader;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

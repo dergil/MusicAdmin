@@ -1,6 +1,11 @@
 package mediaDB.domain_logic;
 
 import mediaDB.MediaTypesTest;
+import mediaDB.domain_logic.enums.Tag;
+import mediaDB.domain_logic.observables.SizeObservable;
+import mediaDB.domain_logic.observables.TagObservable;
+import mediaDB.domain_logic.producer.Producer;
+import mediaDB.domain_logic.producer.Uploader;
 import mediaDB.net.server.ToClientMessenger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,19 +1,30 @@
 package mediaDB.ui.cli.modes;
 
+import mediaDB.routing.EventHandler;
 import mediaDB.routing.EventListener;
 import mediaDB.routing.NetworkEvent;
 import mediaDB.routing.events.misc.StringEvent;
 import mediaDB.ui.cli.Console;
+import mediaDB.ui.cli.EventFactory;
 
 import java.io.IOException;
 
-public class ChangeMode {
+public class ChangeMode implements CLIMode{
     String[] splitInput = null;
     String input = null;
-    EventListener<NetworkEvent> serverEventBus;
+    EventListener<NetworkEvent> eventBus;
+    EventHandler eventHandler;
+    EventFactory eventFactory;
 
-    public ChangeMode(EventListener<NetworkEvent> serverEventBus) {
-        this.serverEventBus = serverEventBus;
+//    public ChangeMode(EventListener<NetworkEvent> eventBus, EventFactory eventFactory) {
+//        this.eventBus = eventBus;
+//        this.eventFactory = eventFactory;
+//    }
+
+
+    public ChangeMode(EventHandler eventHandler, EventFactory eventFactory) {
+        this.eventHandler = eventHandler;
+        this.eventFactory = eventFactory;
     }
 
     public void start() throws IOException {
@@ -39,7 +50,7 @@ public class ChangeMode {
     }
 
     private void address() throws IOException {
-        StringEvent stringEvent = new StringEvent(this, "Change", "address", splitInput[0]);
-        serverEventBus.onMediaEvent(stringEvent);
+        StringEvent stringEvent = eventFactory.stringEvent("Change", "address", splitInput[0]);
+        eventHandler.handle(stringEvent);
     }
 }

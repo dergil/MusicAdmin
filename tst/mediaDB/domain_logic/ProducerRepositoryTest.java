@@ -1,6 +1,7 @@
 package mediaDB.domain_logic;
 
-import org.junit.jupiter.api.AfterEach;
+import mediaDB.domain_logic.producer.Producer;
+import mediaDB.domain_logic.producer.ProducerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

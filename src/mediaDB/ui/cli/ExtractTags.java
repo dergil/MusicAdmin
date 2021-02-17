@@ -1,6 +1,6 @@
 package mediaDB.ui.cli;
 
-import mediaDB.domain_logic.Tag;
+import mediaDB.domain_logic.enums.Tag;
 
 import java.util.ArrayList;
 import java.util.Collection;

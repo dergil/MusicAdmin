@@ -1,5 +1,7 @@
 package mediaDB.domain_logic;
 
+import mediaDB.domain_logic.observables.SizeObservable;
+import mediaDB.domain_logic.observables.TagObservable;
 import mediaDB.domain_logic.file_interfaces.Content;
 import mediaDB.domain_logic.file_interfaces.MediaContent;
 import mediaDB.domain_logic.file_interfaces.Uploadable;

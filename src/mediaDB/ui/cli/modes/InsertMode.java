@@ -1,23 +1,27 @@
 package mediaDB.ui.cli.modes;
 
-import mediaDB.domain_logic.MediaTypes;
-import mediaDB.net.server.ServerEventBus;
+import mediaDB.domain_logic.enums.MediaTypes;
+import mediaDB.routing.EventHandler;
 import mediaDB.routing.EventListener;
 import mediaDB.routing.NetworkEvent;
+import mediaDB.routing.events.files.*;
+import mediaDB.routing.events.misc.ProducerEvent;
 import mediaDB.ui.cli.Console;
+import mediaDB.ui.cli.EventFactory;
 
 import java.io.IOException;
 
-public class InsertMode {
+public class InsertMode implements CLIMode {
     String mediaTypes = MediaTypes.ALL_TYPES.toString();
-    InsertModeInputProcessing insertModeInputProcessing;
     String[] splitInput = null;
     String input = null;
-    EventListener<NetworkEvent> serverEventBus;
+    EventListener<NetworkEvent> eventBus;
+    EventHandler eventHandler;
+    EventFactory eventFactory;
 
-    public InsertMode(InsertModeInputProcessing insertModeInputProcessing, EventListener<NetworkEvent> serverEventBus) {
-        this.insertModeInputProcessing = insertModeInputProcessing;
-        this.serverEventBus = serverEventBus;
+    public InsertMode(EventHandler eventHandler, EventFactory eventFactory) {
+        this.eventHandler = eventHandler;
+        this.eventFactory = eventFactory;
     }
 
 //    while loop, damit mode nicht jedes mal neu ausgewählt werden muss
@@ -39,7 +43,7 @@ public class InsertMode {
     }
 
 //    TODO: eigene Klasse, damit Methode nicht public sein muss
-    public void getAndVerifyInput() throws IOException {
+    private void getAndVerifyInput() throws IOException {
         input = Console.prompt("Insertion mode ");
         splitInput = input.split(" ");
         if (splitInput[0].equals("0"))
@@ -48,12 +52,12 @@ public class InsertMode {
             return;
 //            continue;
         if (checkIfProducer()){
-            insertModeInputProcessing.producer(splitInput[0]);
+            producer(splitInput[0]);
             return;
 //            continue;
         }
         if (checkIfValidMediafile()){
-            insertModeInputProcessing.mediaFile(splitInput);
+            mediaFile(splitInput);
         }
         else System.out.println("Syntax error. Bitrate, Länge, Höhe, Breite und Samplingrate müssen numerisch sein.");
     }
@@ -153,8 +157,7 @@ public class InsertMode {
     }
 
     private boolean checkIfProducer() {
-//        TODO: returnt bei z.B. einzelnem Buchstaben, der in mediafiles vorkommnt, false
-        return splitInput.length == 1 && !mediaTypes.contains(splitInput[0]);
+        return splitInput.length == 1 && !validMediaType(splitInput[0]);
     }
 
     private boolean checkForSpace() {
@@ -165,7 +168,46 @@ public class InsertMode {
         return false;
     }
 
-    public InsertModeInputProcessing getInsertModeInputProcessing() {
-        return insertModeInputProcessing;
+    private void mediaFile(String[] input) throws IOException {
+        switch (input[0]) {
+            case "Audio":
+                AudioEvent audioEvent = eventFactory.audioEvent(input);
+                eventHandler.handle(audioEvent);
+                break;
+            case "AudioVideo":
+                AudioVideoEvent audioVideoEvent = eventFactory.audioVideoEvent(input);
+                eventHandler.handle(audioVideoEvent);
+                break;
+            case "InteractiveVideo":
+                InteractiveVideoEvent interactiveVideoEvent = eventFactory.interactiveVideoEvent(input);
+                eventHandler.handle(interactiveVideoEvent);
+                break;
+            case "LicensedAudio":
+                LicensedAudioEvent licensedAudioEvent = eventFactory.licensedAudioEvent(input);
+                eventHandler.handle(licensedAudioEvent);
+                break;
+            case "LicensedAudioVideo":
+                LicensedAudioVideoEvent licensedAudioVideoEvent = eventFactory.licensedAudioVideoEvent(input);
+                eventHandler.handle(licensedAudioVideoEvent);
+                break;
+            case "LicensedVideo":
+                LicensedVideoEvent licensedVideoEvent = eventFactory.licensedVideoEvent(input);
+                eventHandler.handle(licensedVideoEvent);
+                break;
+            default:
+                throw new IllegalArgumentException("Unrecognized media file type");
+        }
     }
+
+    private void producer(String name) throws IOException {
+        ProducerEvent producerEvent = eventFactory.producerEvent(name, "add");
+        eventHandler.handle(producerEvent);
+    }
+
+    private boolean validMediaType(String input){
+        return input.equalsIgnoreCase("Audio") || input.equalsIgnoreCase("AudioVideo") ||
+                input.equalsIgnoreCase("InteractiveVideo") || input.equalsIgnoreCase("LicensedAudio") ||
+                input.equalsIgnoreCase("LicensedAudioVideo") || input.equalsIgnoreCase("LicensedVideo");
+    }
+
 }

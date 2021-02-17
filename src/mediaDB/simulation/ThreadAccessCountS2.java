@@ -1,13 +1,11 @@
 package mediaDB.simulation;
 
 
-import mediaDB.domain_logic.Administration;
 import mediaDB.domain_logic.MediaFileRepository;
 import mediaDB.domain_logic.file_interfaces.Content;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ThreadAccessCountS2 extends Thread {

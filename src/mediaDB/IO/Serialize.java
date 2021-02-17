@@ -1,8 +1,11 @@
 package mediaDB.IO;
 
 import mediaDB.domain_logic.*;
+import mediaDB.domain_logic.observables.SizeObservable;
+import mediaDB.domain_logic.observables.TagObservable;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
-import mediaDB.observer.Observer;
+import mediaDB.domain_logic.producer.ProducerRepository;
+import mediaDB.domain_logic.producer.Uploader;
 
 import java.io.*;
 import java.math.BigDecimal;

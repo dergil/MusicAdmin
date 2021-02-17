@@ -2,12 +2,10 @@ package mediaDB.net.client;
 
 //Quelle: https://www.baeldung.com/udp-in-java
 
+import mediaDB.routing.EventHandler;
 import mediaDB.routing.NetworkEvent;
-import mediaDB.routing.events.misc.ProducerEvent;
-import mediaDB.routing.events.misc.ServerResponseEvent;
 import mediaDB.ui.cli.CLIAdminForNet;
-import mediaDB.ui.cli.event_creation.CreateProducerEvent;
-import mediaDB.ui.cli.event_creation.CreateServerResponseEvent;
+import mediaDB.ui.cli.EventFactory;
 import mediaDB.ui.cli.modes.*;
 
 import java.io.*;
@@ -19,8 +17,6 @@ public class UDPClient {
     private DatagramSocket socket;
     private InetAddress address;
     private int port;
-
-    private byte[] buf;
 
     public UDPClient() throws SocketException, UnknownHostException {
         socket = new DatagramSocket();
@@ -40,20 +36,18 @@ public class UDPClient {
         return port;
     }
 
-    public void sendEvent(NetworkEvent networkEvent) throws IOException {
-        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
-        ObjectOutput oo = new ObjectOutputStream(bStream);
-        oo.writeObject(networkEvent);
-        oo.close();
+//    public void sendEvent(NetworkEvent networkEvent) throws IOException {
+//        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+//        ObjectOutput oo = new ObjectOutputStream(bStream);
+//        oo.writeObject(networkEvent);
+//        oo.close();
+//
+//        byte[] buf = bStream.toByteArray();
+//        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, port);
+//        socket.send(packet);
+//    }
 
-        buf = bStream.toByteArray();
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, port);
-        socket.send(packet);
-    }
-
-    public void receiveEvent() throws IOException, ClassNotFoundException {
-
-
+    public void receiveEvent() throws IOException {
         try {
             while (true) {
                 byte[] buf = new byte[256];
@@ -74,15 +68,18 @@ public class UDPClient {
         }
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException {
         UDPClient udpClient = new UDPClient();
         ClientEventBusUDP clientEventBus = new ClientEventBusUDP(udpClient.getSocket(), udpClient.getAddress(), udpClient.getPort());
-        InsertModeInputProcessing insertModeInputProcessing = new InsertModeInputProcessing(clientEventBus);
-        InsertMode insertMode = new InsertMode(insertModeInputProcessing, clientEventBus);
-        DisplayMode displayMode = new DisplayMode(clientEventBus);
-        DeletionMode deletionMode = new DeletionMode(clientEventBus);
-        ChangeMode changeMode = new ChangeMode(clientEventBus);
-        CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode);
+        EventHandler eventHandler = new EventHandler();
+        eventHandler.add(clientEventBus);
+        EventFactory eventFactory = new EventFactory();
+        InsertMode insertMode = new InsertMode(eventHandler, eventFactory);
+        DisplayMode displayMode = new DisplayMode(eventHandler, eventFactory);
+        DeletionMode deletionMode = new DeletionMode(eventHandler, eventFactory);
+        ChangeMode changeMode = new ChangeMode(eventHandler, eventFactory);
+        PersistenceMode persistenceMode = new PersistenceMode(eventHandler, eventFactory);
+        CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode, persistenceMode);
 
         while (true){
             cliAdmin.start();

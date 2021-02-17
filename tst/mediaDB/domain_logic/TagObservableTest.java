@@ -1,8 +1,9 @@
 package mediaDB.domain_logic;
 
+import mediaDB.domain_logic.enums.Tag;
+import mediaDB.domain_logic.observables.TagObservable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.*;
 

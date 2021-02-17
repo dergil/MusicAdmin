@@ -2,7 +2,7 @@ package mediaDB.simulation;
 
 
 import mediaDB.domain_logic.MediaFileRepository;
-import mediaDB.domain_logic.SizeObservable;
+import mediaDB.domain_logic.observables.SizeObservable;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
 
 import java.math.BigDecimal;

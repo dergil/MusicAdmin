@@ -1,8 +1,11 @@
 package mediaDB.domain_logic;
 
-import mediaDB.EventFactory;
+import mediaDB.EventFactoryForTesting;
 import mediaDB.MediaTypesTest;
-import mediaDB.domain_logic.listener.LicensedAudioEventListener;
+import mediaDB.domain_logic.observables.SizeObservable;
+import mediaDB.domain_logic.observables.TagObservable;
+import mediaDB.domain_logic.listener.files.LicensedAudioEventListener;
+import mediaDB.domain_logic.producer.ProducerRepository;
 import mediaDB.routing.events.files.LicensedAudioEvent;
 import mediaDB.net.server.ToClientMessenger;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +20,7 @@ class LicensedAudioEventListenerTest {
     SizeObservable sizeObservable;
     MediaFileRepository mediaFileRepository;
     LicensedAudioEventListener licensedAudioEventListener;
-    EventFactory eventFactory = new EventFactory();
+    EventFactoryForTesting eventFactoryForTesting = new EventFactoryForTesting();
     LicensedAudioEvent licensedAudioEvent;
 
     @BeforeEach
@@ -29,7 +32,7 @@ class LicensedAudioEventListenerTest {
         ProducerRepository producerRepository = new ProducerRepository();
         AddressRepository addressRepository = new AddressRepository();
         MediaFileFactory mediaFileFactory = new MediaFileFactory(mediaFileRepository, addressRepository);
-        licensedAudioEvent = eventFactory.licensedAudioEvent();
+        licensedAudioEvent = eventFactoryForTesting.licensedAudioEvent();
         licensedAudioEventListener = new LicensedAudioEventListener(producerRepository, mediaFileFactory, mediaFileRepository);
         producerRepository.addProducer("Gilbert");
     }

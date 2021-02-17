@@ -9,13 +9,15 @@ public class CLIAdminForNet {
     DisplayMode displayMode;
     DeletionMode deleteMode;
     ChangeMode changeMode;
+    PersistenceMode persistenceMode;
 
 
-    public CLIAdminForNet(InsertMode insertMode, DisplayMode displayMode, DeletionMode deleteMode, ChangeMode changeMode) {
+    public CLIAdminForNet(InsertMode insertMode, DisplayMode displayMode, DeletionMode deleteMode, ChangeMode changeMode, PersistenceMode persistenceMode) {
         this.insertMode = insertMode;
         this.displayMode = displayMode;
         this.deleteMode = deleteMode;
         this.changeMode = changeMode;
+        this.persistenceMode = persistenceMode;
     }
 
     public void start() throws IOException {
@@ -46,9 +48,9 @@ public class CLIAdminForNet {
             case ":u":
                 changeMode.start();
                 break;
-//            case ":p":
-//                Console.persistenceMode();
-//                break;
+            case ":p":
+                    persistenceMode.start();
+                break;
             default:
                 System.out.println("Unknown mode.");
                 break;

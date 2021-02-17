@@ -1,5 +1,7 @@
 package mediaDB.domain_logic;
 
+import mediaDB.domain_logic.observables.SizeObservable;
+import mediaDB.domain_logic.observables.TagObservable;
 import mediaDB.domain_logic.files.InteractiveVideoFile;
 import mediaDB.simulation.RandomMediadfileInstances;
 import mediaDB.net.server.ToClientMessenger;

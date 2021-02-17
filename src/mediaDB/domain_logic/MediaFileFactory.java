@@ -1,7 +1,9 @@
 
 package mediaDB.domain_logic;
 
+import mediaDB.domain_logic.enums.Tag;
 import mediaDB.domain_logic.files.*;
+import mediaDB.domain_logic.producer.Uploader;
 
 import java.math.BigDecimal;
 import java.time.Duration;

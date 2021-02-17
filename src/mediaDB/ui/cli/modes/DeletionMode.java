@@ -1,20 +1,25 @@
 package mediaDB.ui.cli.modes;
 
+import mediaDB.routing.EventHandler;
 import mediaDB.routing.EventListener;
 import mediaDB.routing.NetworkEvent;
 import mediaDB.routing.events.misc.StringEvent;
 import mediaDB.ui.cli.Console;
+import mediaDB.ui.cli.EventFactory;
 
 import java.io.IOException;
 
-public class DeletionMode {
+public class DeletionMode implements CLIMode {
     EventListener<NetworkEvent> serverEventBus;
+    EventHandler eventHandler;
+    EventFactory eventFactory;
 
     String[] splitInput = null;
     String input = null;
 
-    public DeletionMode(EventListener<NetworkEvent> serverEventBus) {
-        this.serverEventBus = serverEventBus;
+    public DeletionMode(EventHandler eventHandler, EventFactory eventFactory) {
+        this.eventHandler = eventHandler;
+        this.eventFactory = eventFactory;
     }
 
     public void start() throws IOException {
@@ -42,13 +47,14 @@ public class DeletionMode {
         return input.matches("[0-9]+");
     }
 
+//    TODO: mit producerevent ersetzen
     private void address() throws IOException {
-        StringEvent stringEvent = new StringEvent(this, "Deletion", "address", splitInput[0]);
-        serverEventBus.onMediaEvent(stringEvent);
+        StringEvent stringEvent = eventFactory.stringEvent("Deletion", "address", splitInput[0]);
+        eventHandler.handle(stringEvent);
     }
 
     private void producer() throws IOException {
-        StringEvent stringEvent = new StringEvent(this, "Deletion", "producer", splitInput[0]);
-        serverEventBus.onMediaEvent(stringEvent);
+        StringEvent stringEvent = eventFactory.stringEvent("Deletion", "producer", splitInput[0]);
+        eventHandler.handle(stringEvent);
     }
 }

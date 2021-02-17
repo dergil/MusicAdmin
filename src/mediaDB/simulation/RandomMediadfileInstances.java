@@ -1,9 +1,9 @@
 package mediaDB.simulation;
 
-import mediaDB.domain_logic.*;
+import mediaDB.domain_logic.enums.Tag;
 import mediaDB.domain_logic.files.InteractiveVideoFile;
 import mediaDB.domain_logic.files.LicensedAudioVideoFile;
-import mediaDB.domain_logic.Producer;
+import mediaDB.domain_logic.producer.Producer;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
 
 import java.math.BigDecimal;

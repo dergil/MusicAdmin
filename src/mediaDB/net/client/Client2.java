@@ -1,8 +1,9 @@
 package mediaDB.net.client;
 
+import mediaDB.routing.EventHandler;
 import mediaDB.routing.events.misc.ServerResponseEvent;
 import mediaDB.ui.cli.CLIAdminForNet;
-import mediaDB.ui.cli.event_creation.CreateServerResponseEvent;
+import mediaDB.ui.cli.EventFactory;
 import mediaDB.ui.cli.modes.*;
 
 import java.io.EOFException;
@@ -19,16 +20,18 @@ public class Client2 {
              ObjectInputStream in = new ObjectInputStream(socket.getInputStream());){
 
             ClientEventBus clientEventBus = new ClientEventBus(out);
-            InsertModeInputProcessing insertModeInputProcessing = new InsertModeInputProcessing(clientEventBus);
-            InsertMode insertMode = new InsertMode(insertModeInputProcessing, clientEventBus);
-            DisplayMode displayMode = new DisplayMode(clientEventBus);
-            DeletionMode deletionMode = new DeletionMode(clientEventBus);
-            ChangeMode changeMode = new ChangeMode(clientEventBus);
-            CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode);
+            EventHandler eventHandler = new EventHandler();
+            eventHandler.add(clientEventBus);
+            EventFactory eventFactory = new EventFactory();
+            InsertMode insertMode = new InsertMode(eventHandler, eventFactory);
+            DisplayMode displayMode = new DisplayMode(eventHandler, eventFactory);
+            DeletionMode deletionMode = new DeletionMode(eventHandler, eventFactory);
+            ChangeMode changeMode = new ChangeMode(eventHandler, eventFactory);
+            PersistenceMode persistenceMode = new PersistenceMode(eventHandler, eventFactory);
+            CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode, persistenceMode);
 
-            CreateServerResponseEvent createServerResponseEvent = new CreateServerResponseEvent();
             String marker = "client2";
-            ServerResponseEvent markerEvent = createServerResponseEvent.process(marker);
+            ServerResponseEvent markerEvent = eventFactory.serverResponseEvent(marker);
             out.writeObject(markerEvent);
 
             cliAdmin.start();

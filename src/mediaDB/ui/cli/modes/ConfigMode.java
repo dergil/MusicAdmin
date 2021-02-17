@@ -2,12 +2,12 @@ package mediaDB.ui.cli.modes;
 
 import mediaDB.domain_logic.MediaFileRepository;
 import mediaDB.ui.cli.Console;
-import mediaDB.ui.cli.observer.SizeObserver;
-import mediaDB.ui.cli.observer.TagObserver;
+import mediaDB.observer.SizeObserver;
+import mediaDB.observer.TagObserver;
 
 import java.io.IOException;
 
-public class ConfigMode {
+public class ConfigMode implements CLIMode {
     String[] splitInput = null;
     String input = null;
 //    TODO: extern initialisieren

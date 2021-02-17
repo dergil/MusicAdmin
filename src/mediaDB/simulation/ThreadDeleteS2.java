@@ -1,12 +1,10 @@
 package mediaDB.simulation;
 
 
-import mediaDB.domain_logic.Administration;
 import mediaDB.domain_logic.MediaFileRepository;
 import mediaDB.domain_logic.file_interfaces.Content;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ThreadDeleteS2 extends Thread{

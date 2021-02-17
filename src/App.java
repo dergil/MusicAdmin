@@ -1,17 +1,25 @@
-import mediaDB.IO.Deserialize;
-import mediaDB.IO.DeserializeDomainContent;
-import mediaDB.IO.RandomAccess;
-import mediaDB.IO.Serialize;
+import mediaDB.IO.*;
 import mediaDB.domain_logic.*;
+import mediaDB.domain_logic.listener.display.DisplayEventListener;
+import mediaDB.domain_logic.listener.display.DisplayModeServer;
+import mediaDB.domain_logic.listener.display.GenerateDisplayContent;
+import mediaDB.domain_logic.listener.files.*;
+import mediaDB.domain_logic.observables.SizeObservable;
+import mediaDB.domain_logic.observables.TagObservable;
 import mediaDB.domain_logic.listener.*;
+import mediaDB.domain_logic.producer.ProducerRepository;
 import mediaDB.net.server.ServerEventBus;
 import mediaDB.net.server.ToClientMessenger;
+import mediaDB.routing.EventHandler;
 import mediaDB.ui.cli.*;
+import mediaDB.ui.cli.EventFactory;
 import mediaDB.ui.cli.modes.*;
-import mediaDB.ui.cli.observer.SizeObserver;
-import mediaDB.ui.cli.observer.TagObserver;
+import mediaDB.observer.SizeObserver;
+import mediaDB.observer.TagObserver;
 
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
 
 public class App {
 
@@ -37,6 +45,13 @@ public class App {
         DisplayModeServer displayModeServer = new DisplayModeServer(generateDisplayContent, producerRepository, mediaFileRepository);
         DisplayEventListener displayEventListener = new DisplayEventListener(displayModeServer, mediaFileRepository, toClient);
         StringEventListener stringEventListener = new StringEventListener(mediaFileRepository, producerRepository);
+        Serialize serialize = new Serialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository);
+        DeserializeDomainContent deserializeDomainContent = new DeserializeDomainContent();
+        Deserialize deserialize = new Deserialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository, deserializeDomainContent);
+        RandomAccessFile randomAccessFile = new RandomAccessFile("RandomAccessFile", "rw");
+        ArrayList<SavedMediaFile> savedMediaFiles = new ArrayList<>();
+        RandomAccess randomAccess = new RandomAccess(randomAccessFile, savedMediaFiles);
+        PersistenceEventListener persistenceEventListener = new PersistenceEventListener(mediaFileRepository, serialize, deserialize, deserializeDomainContent, randomAccess);
 
         ServerEventBus serverEventBus = new ServerEventBus();
         serverEventBus.register(audioEventListener);
@@ -48,22 +63,20 @@ public class App {
         serverEventBus.register(producerEventListener);
         serverEventBus.register(displayEventListener);
         serverEventBus.register(stringEventListener);
-
+        serverEventBus.register(persistenceEventListener);
 
 //        Client
-        InsertModeInputProcessing insertModeInputProcessing = new InsertModeInputProcessing(serverEventBus);
-        InsertMode insertMode = new InsertMode(insertModeInputProcessing, serverEventBus);
-        DisplayMode displayMode = new DisplayMode(serverEventBus);
-        DeletionMode deletionMode = new DeletionMode(serverEventBus);
-        ChangeMode changeMode = new ChangeMode(serverEventBus);
+        EventHandler eventHandler = new EventHandler();
+        eventHandler.add(serverEventBus);
+        EventFactory eventFactory = new EventFactory();
+        InsertMode insertMode = new InsertMode(eventHandler, eventFactory);
+        DisplayMode displayMode = new DisplayMode(eventHandler, eventFactory);
+        DeletionMode deletionMode = new DeletionMode(eventHandler, eventFactory);
+        ChangeMode changeMode = new ChangeMode(eventHandler, eventFactory);
         ConfigMode configMode = new ConfigMode(mediaFileRepository);
-        Serialize serialize = new Serialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository);
-        DeserializeDomainContent deserializeDomainContent = new DeserializeDomainContent();
-        Deserialize deserialize = new Deserialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository, deserializeDomainContent);
-        RandomAccess randomAccess = new RandomAccess();
-        PersistenceMode persistenceMode = new PersistenceMode(serverEventBus, mediaFileRepository, serialize, deserialize, deserializeDomainContent, randomAccess);
+        PersistenceMode persistenceMode = new PersistenceMode(eventHandler, eventFactory);
         CLIAdmin cliAdmin = new CLIAdmin(insertMode, displayMode, deletionMode, changeMode, configMode, persistenceMode);
-//        Observer
+//        Observers
         SizeObserver sizeObserver = new SizeObserver(sizeObservable);
         sizeObservable.register(sizeObserver);
         TagObserver tagObserver = new TagObserver(tagObservable);

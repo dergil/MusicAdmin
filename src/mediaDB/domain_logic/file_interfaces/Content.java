@@ -1,6 +1,6 @@
 package mediaDB.domain_logic.file_interfaces;
 
-import mediaDB.domain_logic.Tag;
+import mediaDB.domain_logic.enums.Tag;
 
 import java.util.Collection;
 

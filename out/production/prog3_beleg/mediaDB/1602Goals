@@ -20,3 +20,7 @@ access modifier am Ende überarbeiten
 
 toclient 2 outputs geben
 jede line hat zahl am Ende, über die die clients erfahren können, ob die Nachricht für sie bestimmt ist
+
+import static org.mockito.Mockito.*;
+
+Exceptions, die über die ganze hierarchie gehen, können an Stelle der Entstehung mit try catch abegafangen werden
