@@ -18,6 +18,8 @@ public class ProducerEventListener implements EventListener<ProducerEvent> {
     public void onMediaEvent(ProducerEvent event) throws IOException {
         if (event.getCommand().equals("add"))
             producerRepository.addProducer(new Producer(event.getName()));
+        else if (event.getCommand().equals("remove"))
+            producerRepository.removeProducer(event.getName());
     }
 
     @Override

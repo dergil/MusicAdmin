@@ -87,7 +87,7 @@ public class SortUploads {
         return Integer.parseInt(accessCount);
     }
 
-    public String  getProducer(String upload){
+    public String getProducer(String upload){
         int beginindex = upload.lastIndexOf("name='") + 6;
         String producer = "";
         String currentChar = "";

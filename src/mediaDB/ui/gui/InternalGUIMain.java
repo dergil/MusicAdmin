@@ -11,10 +11,12 @@ https://stackoverflow.com/questions/30814258/javafx-pass-parameters-while-instan
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,6 +39,8 @@ import javafx.event.EventHandler;
 import mediaDB.domain_logic.producer.Uploader;
 import mediaDB.net.server.ServerEventBus;
 import mediaDB.net.server.ToClientMessenger;
+import mediaDB.routing.events.misc.ProducerEvent;
+import mediaDB.routing.events.misc.StringEvent;
 import mediaDB.ui.cli.EventFactory;
 
 import java.io.IOException;
@@ -112,11 +116,13 @@ public class InternalGUIMain extends Application {
         Button addLicensedAudioButton = new Button("Add LicensedAudio");
         Button addLicensedAudioVideoButton = new Button("Add LicensedAudioVideo");
         Button addLicensedVideoButton = new Button("Add LicensedVideo");
-        Button deleteButton = new Button("Delete File");
+        Button deleteUpload = new Button("Delete file");
+        Button deleteProducer = new Button("Delete producer");
         Button addProducerButton = new Button("Add Producer");
         Button sortByAddress = new Button("Sort by address");
         Button sortByAccessCount = new Button("Sort by access count");
         Button sortByProducer = new Button("Sort by producer");
+        Button incrementAccessCount = new Button("Increment access count");
 
         SortUploads sortUploads = new SortUploads();
 
@@ -303,24 +309,46 @@ public class InternalGUIMain extends Application {
             }
         });
 
-        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                int selectedFile = uploadsListView.getSelectionModel().getSelectedIndex();
-//                TODO: adresse (vom file) von geclicktem list itemsj rausfinden
-//                admin.delete(selectedFile);
-                System.out.println(selectedFile);
-                System.out.println(uploadsListView.getItems().toString());
-                String uploadString = uploadsListView.getItems().get(selectedFile);
-                String[] elements = uploadString.split(",");
-                String addressUnprocessed = elements[5];
-                System.out.println(addressUnprocessed);
-                String address = addressUnprocessed.substring(addressUnprocessed.indexOf("=") + 1);
-                address = address.replaceAll("'", "");
-                System.out.println(address);
-                mediaFileRepository.delete(address);
+        deleteUpload.setOnAction(event -> {
+            int selectedFile = uploadsListView.getSelectionModel().getSelectedIndex();
+            System.out.println(uploadsListView.getItems().toString());
+            String uploadString = uploadsListView.getItems().get(selectedFile);
+            String[] elements = uploadString.split(",");
+            String addressUnprocessed = elements[5];
+            System.out.println(addressUnprocessed);
+            String address = addressUnprocessed.substring(addressUnprocessed.indexOf("=") + 1);
+            address = address.replaceAll("'", "");
+            System.out.println(address);
+            mediaFileRepository.delete(address);
+        });
+
+        deleteProducer.setOnAction(actionEvent -> {
+            int selectedProducer = producerListView.getSelectionModel().getSelectedIndex();
+            System.out.println(producerListView.getItems().toString());
+            String producerString = producerListView.getItems().get(selectedProducer);
+            String producer = sortUploads.getProducer(producerString);
+            ProducerEvent event = eventFactory.producerEvent(producer, "remove");
+            try {
+                eventHandler.handle(event);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            });
+            updateProducerList();
+        });
+
+        incrementAccessCount.setOnAction(actionEvent -> {
+            int selectedFile = uploadsListView.getSelectionModel().getSelectedIndex();
+            System.out.println(uploadsListView.getItems().toString());
+            String uploadString = uploadsListView.getItems().get(selectedFile);
+            int address = sortUploads.getAddress(uploadString);
+            StringEvent stringEvent = eventFactory.stringEvent("Change", "address", String.valueOf(address));
+            try {
+                eventHandler.handle(stringEvent);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            updateUploaderList();
+        });
 
         addProducerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -356,12 +384,12 @@ public class InternalGUIMain extends Application {
         sortByAccessCount.setOnAction(actionEvent -> sortUploads.accessCount(uploadsListView));
         sortByProducer.setOnAction(actionEvent -> sortUploads.producer(uploadsListView));
 
-
+        HBox insert1 = threeButtonsHBox(addAudioButton, addAudioVideoButton, addInteractiveVideoButton);
+        HBox insert2 = threeButtonsHBox(addLicensedAudioButton, addLicensedAudioVideoButton, addLicensedVideoButton);
+        HBox sort = threeButtonsHBox(sortByAddress, sortByAccessCount, sortByProducer);
 
         /* creating vertical box to add item objects */
-        VBox vBox = new VBox(uploadsListView, producerListView, addAudioButton, addAudioVideoButton, addInteractiveVideoButton,
-                addLicensedAudioButton, addLicensedAudioVideoButton, addLicensedVideoButton, deleteButton,
-                addProducerButton, sortByAddress, sortByAccessCount, sortByProducer);
+        VBox vBox = new VBox(uploadsListView, producerListView, insert1, insert2, deleteUpload, deleteProducer, addProducerButton, sort, incrementAccessCount);
         /* creating scene */
         Scene scene = new Scene(vBox, 220, 270);
         /* adding scene to stage */
@@ -391,16 +419,12 @@ public class InternalGUIMain extends Application {
         }
     }
 
-//    private void populate(Administration admin, ListView<String> listViewReference){
-//        RandomMediadfileInstances random = new RandomMediadfileInstances();
-//        ArrayList<Producer> producers;
-//        producers = random.getProducers();
-//        for (Producer producer : producers) {
-//            admin.addProducer(producer);
-//        }
-//        for (int i = 0; i < 2; i++) {
-//            admin.create(random.randomInteractiveVideoFile());
-//            admin.create(random.randomLicensedAudioVideoFile());
-//        }
-//    }
+    public HBox threeButtonsHBox(Button one, Button two, Button three) {
+        HBox hbox = new HBox();
+        hbox.setPadding(new Insets(15, 12, 15, 12));
+        hbox.setSpacing(10);
+        hbox.getChildren().addAll(one, two, three);
+        return hbox;
+    }
+
 }
