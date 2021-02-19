@@ -131,4 +131,5 @@ public class InteractiveVideoFile implements InteractiveVideo, Serializable {
                 ", uploadDate=" + uploadDate +
                 '}';
     }
+
 }

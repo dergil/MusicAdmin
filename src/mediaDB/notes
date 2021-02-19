@@ -24,3 +24,8 @@ jede line hat zahl am Ende, über die die clients erfahren können, ob die Nachr
 import static org.mockito.Mockito.*;
 
 Exceptions, die über die ganze hierarchie gehen, können an Stelle der Entstehung mit try catch abegafangen werden
+
+
+GUI
+* muss über events gehen, um IoC zu sichern
+* wohl aber nicht übers netzwerk
