@@ -8,13 +8,14 @@ package mediaDB.net.server;
 
 import mediaDB.domain_logic.*;
 import mediaDB.domain_logic.listener.display.DisplayEventListener;
-import mediaDB.domain_logic.listener.display.DisplayModeServer;
+import mediaDB.domain_logic.listener.display.DisplayModeProcessing;
 import mediaDB.domain_logic.listener.display.GenerateDisplayContent;
 import mediaDB.domain_logic.listener.files.*;
 import mediaDB.domain_logic.observables.SizeObservable;
 import mediaDB.domain_logic.observables.TagObservable;
 import mediaDB.domain_logic.listener.*;
 import mediaDB.domain_logic.producer.ProducerRepository;
+import mediaDB.net.EventBus;
 import mediaDB.routing.NetworkEvent;
 import mediaDB.routing.events.misc.ServerResponseEvent;
 
@@ -25,12 +26,12 @@ import java.net.*;
 public class UDPServer {
     private DatagramSocket socket;
     private byte[] buf = new byte[20048];
-    ServerEventBus serverEventBus;
+    EventBus eventBus;
     private int clientPort;
     private InetAddress address;
 
-    public UDPServer(ServerEventBus serverEventBus) throws SocketException {
-        this.serverEventBus = serverEventBus;
+    public UDPServer(EventBus eventBus) throws SocketException {
+        this.eventBus = eventBus;
         socket = new DatagramSocket(4445);
     }
 
@@ -80,10 +81,10 @@ public class UDPServer {
 //        }
 //    }
 
-    private void sendResponse(String response) throws IOException {
+    private void sendResponse(String response, String sender) throws IOException {
         ByteArrayOutputStream bStream = new ByteArrayOutputStream();
         ObjectOutput oo = new ObjectOutputStream(bStream);
-        ServerResponseEvent serverResponseEvent = new ServerResponseEvent(this, response);
+        ServerResponseEvent serverResponseEvent = new ServerResponseEvent(this, "none", response, sender);
         oo.writeObject(serverResponseEvent);
         oo.close();
 
@@ -99,7 +100,7 @@ public class UDPServer {
         MediaFileRepository mediaFileRepository  = new MediaFileRepository(toClient, sizeObservable, tagObservable);
         ProducerRepository producerRepository = new ProducerRepository();
         AddressRepository addressRepository = new AddressRepository();
-        MediaFileFactory mediaFileFactory = new MediaFileFactory(mediaFileRepository, addressRepository);
+        MediaFileFactory mediaFileFactory = new MediaFileFactory(mediaFileRepository, addressRepository, toClient);
 
         AudioEventListener audioEventListener = new AudioEventListener(producerRepository, mediaFileFactory, mediaFileRepository);
         AudioVideoEventListener audioVideoEventListener = new AudioVideoEventListener(producerRepository, mediaFileFactory, mediaFileRepository);
@@ -107,36 +108,37 @@ public class UDPServer {
         LicensedAudioEventListener licensedAudioEventListener = new LicensedAudioEventListener(producerRepository, mediaFileFactory, mediaFileRepository);
         LicensedAudioVideoEventListener licensedAudioVideoEventListener = new LicensedAudioVideoEventListener(producerRepository, mediaFileFactory, mediaFileRepository);
         LicensedVideoEventListener licensedVideoEventListener = new LicensedVideoEventListener(producerRepository, mediaFileFactory, mediaFileRepository);
-        ProducerEventListener producerEventListener = new ProducerEventListener(producerRepository);
-        GenerateDisplayContent generateDisplayContent = new GenerateDisplayContent(mediaFileRepository);
-        DisplayModeServer displayModeServer = new DisplayModeServer(generateDisplayContent, producerRepository, mediaFileRepository);
-        DisplayEventListener displayEventListener = new DisplayEventListener(displayModeServer, mediaFileRepository, toClient);
-        StringEventListener stringEventListener = new StringEventListener(mediaFileRepository, producerRepository);
+        ProducerEventListener producerEventListener = new ProducerEventListener(producerRepository, toClient);
+        GenerateDisplayContent generateDisplayContent = new GenerateDisplayContent();
+        DisplayModeProcessing displayModeProcessing = new DisplayModeProcessing(generateDisplayContent, producerRepository, mediaFileRepository);
+        DisplayEventListener displayEventListener = new DisplayEventListener(displayModeProcessing, mediaFileRepository, toClient);
+        StringEventListener stringEventListener = new StringEventListener(mediaFileRepository, producerRepository, toClient);
 
-        ServerEventBus serverEventBus = new ServerEventBus();
-        serverEventBus.register(audioEventListener);
-        serverEventBus.register(audioVideoEventListener);
-        serverEventBus.register(interactiveVideoEventListener);
-        serverEventBus.register(licensedAudioEventListener);
-        serverEventBus.register(licensedAudioVideoEventListener);
-        serverEventBus.register(licensedVideoEventListener);
-        serverEventBus.register(producerEventListener);
-        serverEventBus.register(displayEventListener);
-        serverEventBus.register(stringEventListener);
+        EventBus eventBus = new EventBus();
+        eventBus.register(audioEventListener);
+        eventBus.register(audioVideoEventListener);
+        eventBus.register(interactiveVideoEventListener);
+        eventBus.register(licensedAudioEventListener);
+        eventBus.register(licensedAudioVideoEventListener);
+        eventBus.register(licensedVideoEventListener);
+        eventBus.register(producerEventListener);
+        eventBus.register(displayEventListener);
+        eventBus.register(stringEventListener);
 
-        UDPServer udpServer = new UDPServer(serverEventBus);
+        String sender = "server";
+        UDPServer udpServer = new UDPServer(eventBus);
         NetworkEvent firstReceivedEvent = udpServer.receiveEvent();
         toClient.setSocket(udpServer.getSocket());
         toClient.setAddress(udpServer.getAddress());
         toClient.setClientPort(udpServer.getClientPort());
-        serverEventBus.onMediaEvent(firstReceivedEvent);
-        udpServer.sendResponse("client");
+        eventBus.onMediaEvent(firstReceivedEvent);
+        udpServer.sendResponse("client", sender);
         while (true){
             toClient.setSocket(udpServer.getSocket());
             toClient.setAddress(udpServer.getAddress());
             toClient.setClientPort(udpServer.getClientPort());
-            serverEventBus.onMediaEvent(udpServer.receiveEvent());
-            udpServer.sendResponse("client");
+            eventBus.onMediaEvent(udpServer.receiveEvent());
+            udpServer.sendResponse("client", sender);
         }
 
 //        udpServer.start();

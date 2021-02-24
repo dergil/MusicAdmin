@@ -44,11 +44,11 @@ public class ThreadCreateS1 extends Thread {
                 if (random.nextBoolean()) {
                     interactiveVideoFile = randomFiles.randomInteractiveVideoFile();
                     mediaFileRepository.create(interactiveVideoFile);
-                    System.out.println("Added " + interactiveVideoFile.toString());
+                    System.out.println("Tried to add  " + interactiveVideoFile.toString());
                 } else {
                     licensedAudioVideoFile = randomFiles.randomLicensedAudioVideoFile();
                     mediaFileRepository.create(licensedAudioVideoFile);
-                    System.out.println("Added " + licensedAudioVideoFile.toString());
+                    System.out.println("Tried to add  " + licensedAudioVideoFile.toString());
                 }
             }
             doneSignal.countDown();
@@ -58,11 +58,11 @@ public class ThreadCreateS1 extends Thread {
                     if (random.nextBoolean()) {
                         interactiveVideoFile = randomFiles.randomInteractiveVideoFile();
                         mediaFileRepository.create(interactiveVideoFile);
-                        System.out.println("Added " + interactiveVideoFile.toString());
+                        System.out.println("Tried to add  " + interactiveVideoFile.toString());
                     } else {
                         licensedAudioVideoFile = randomFiles.randomLicensedAudioVideoFile();
                         mediaFileRepository.create(licensedAudioVideoFile);
-                        System.out.println("Added " + licensedAudioVideoFile.toString());
+                        System.out.println("Tried to add  " + licensedAudioVideoFile.toString());
                     }
 //                try {
 //                    sleep(0);

@@ -7,10 +7,12 @@ import java.util.EventObject;
 
 public class DeleteMediaEvent extends EventObject implements NetworkEvent, Serializable {
     int index;
+    private String sender;
 
-    public DeleteMediaEvent(Object o, int index) {
-        super(o);
+    public DeleteMediaEvent(Object source, int index, String sender) {
+        super(source);
         this.index = index;
+        this.sender = sender;
     }
 
     public int getIndex() {
@@ -22,4 +24,8 @@ public class DeleteMediaEvent extends EventObject implements NetworkEvent, Seria
         return "DeleteMediaEvent";
     }
 
+    @Override
+    public String getSender() {
+        return sender;
+    }
 }

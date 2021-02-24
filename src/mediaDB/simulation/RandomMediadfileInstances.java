@@ -1,5 +1,6 @@
 package mediaDB.simulation;
 
+import mediaDB.domain_logic.enums.MediaTypes;
 import mediaDB.domain_logic.enums.Tag;
 import mediaDB.domain_logic.files.InteractiveVideoFile;
 import mediaDB.domain_logic.files.LicensedAudioVideoFile;
@@ -26,10 +27,7 @@ public class RandomMediadfileInstances {
     public InteractiveVideoFile randomInteractiveVideoFile() {
         length = randomDuration();
         bitrate = randomNumber4();
-//        return new InteractiveVideoFile("InteractiveVideo", randomType(), randomNumber3(), randomNumber3(), randomEncoding(),
-//                randomBitrate(), randomDuration(), new BigDecimal(length * bitrate), randomAddress(), randomTags(),
-//                0, randomUploader(), new Date());
-        return new InteractiveVideoFile("file", randomType(), randomNumber3(), randomNumber3(), randomEncoding(),
+        return new InteractiveVideoFile(MediaTypes.INTERACTIVEVIDEO.toString(), randomType(), randomNumber3(), randomNumber3(), randomEncoding(),
                 randomAddress(), randomTags(), 0, bitrate, length, new BigDecimal(length.getSeconds() * bitrate),
                 randomUploader(), new Date());
     }
@@ -37,19 +35,9 @@ public class RandomMediadfileInstances {
     public LicensedAudioVideoFile randomLicensedAudioVideoFile() {
         length = randomDuration();
         bitrate = randomNumber4();
-//        return new LicensedAudioVideoFile(randomNumber5(), randomNumber3(), randomNumber3(), randomEncoding(),
-//                randomHolder(), randomBitrate(), randomDuration(), new BigDecimal(length * bitrate),
-//                randomAddress(), randomTags(), 0, randomUploader(), new Date());
-        return new LicensedAudioVideoFile("file", randomNumber5(), randomNumber3(), randomNumber3(), randomEncoding(),
+        return new LicensedAudioVideoFile(MediaTypes.LICENSEDAUDIOVIDEO.toString(), randomNumber5(), randomNumber3(), randomNumber3(), randomEncoding(),
                 randomAddress(), randomTags(), 0, randomHolder(), bitrate, length,
                 new BigDecimal(bitrate*length.getSeconds()), randomUploader(), new Date());
-    }
-
-    public Uploadable randomUploadable() {
-        int number = randomNumber3();
-        if (number < 550)
-            return randomInteractiveVideoFile();
-        else return randomLicensedAudioVideoFile();
     }
 
     private int randomNumber6() {

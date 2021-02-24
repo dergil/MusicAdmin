@@ -20,7 +20,8 @@ public class Client {
             ClientEventBus clientEventBus = new ClientEventBus(out);
             EventHandler eventHandler = new EventHandler();
             eventHandler.add(clientEventBus);
-            EventFactory eventFactory = new EventFactory();
+            String clientName = "client1";
+            EventFactory eventFactory = new EventFactory(clientName);
             InsertMode insertMode = new InsertMode(eventHandler, eventFactory);
             DisplayMode displayMode = new DisplayMode(eventHandler, eventFactory);
             DeletionMode deletionMode = new DeletionMode(eventHandler, eventFactory);
@@ -28,9 +29,6 @@ public class Client {
             PersistenceMode persistenceMode = new PersistenceMode(eventHandler, eventFactory);
             CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode, persistenceMode);
 
-            String marker = "client1";
-            ServerResponseEvent markerEvent = eventFactory.serverResponseEvent(marker);
-            out.writeObject(markerEvent);
 
             cliAdmin.start();
 
@@ -38,10 +36,12 @@ public class Client {
                 try {
                     while (true) {
                         ServerResponseEvent serverResponseEvent = (ServerResponseEvent) in.readObject();
-                        String response = serverResponseEvent.getEventName();
-                        if (response.equals(marker))
-                            break;
-                        System.out.println(serverResponseEvent.getEventName());
+                        if (serverResponseEvent.getSender().equals(clientName)){
+                            System.out.println(serverResponseEvent.getEventName());
+                            if (serverResponseEvent.getEventName().equals("done")) {
+                                break;
+                            }
+                        }
                     }
                 }
                 catch (EOFException | ClassNotFoundException e ) {

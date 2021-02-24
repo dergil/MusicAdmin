@@ -9,32 +9,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GenerateDisplayContent {
-    MediaFileRepository mediaFileRepository;
-
-    public GenerateDisplayContent(MediaFileRepository mediaFileRepository) {
-        this.mediaFileRepository = mediaFileRepository;
-    }
-
-    public String generate(List<Uploadable> uploadables) throws IOException {
+    public String generate(List<Uploadable> uploadables) {
         return buildFromList(uploadables);
     }
 
-    public String generate(List<Uploadable> uploadables, String type) throws IOException {
+    public String generate(List<Uploadable> uploadables, String type) {
         return contentWithType(uploadables, type);
     }
 
-    private String contentWithType(List<Uploadable> uploadables, String type) throws IOException {
+    private String contentWithType(List<Uploadable> uploadables, String type) {
         if (type.contains("Content") || type.equals("Uploadable"))
             return buildFromList(uploadables);
         ArrayList<Uploadable> filesWithType = new ArrayList<>();
         for (Uploadable uploadable : uploadables) {
-            if (uploadable.getFileType().contains(type))
+            if (uploadable.getFileType().equals(type))
                 filesWithType.add(uploadable);
         }
         return buildFromList(filesWithType);
     }
 
-    private String buildFromList(List<Uploadable> list) throws IOException {
+    private String buildFromList(List<Uploadable> list) {
 //        TODO: soll hier incremented werden? ich glaube nicht, siehe simulation 2
 //        mediaFileRepository.incrementAccessCountForList(list);
 //        Content, Uploadable

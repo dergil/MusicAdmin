@@ -1,6 +1,6 @@
 package mediaDB.ui.cli.modes;
 
-import mediaDB.ExampleInput;
+import for_testing.ExampleInput;
 import mediaDB.routing.EventHandler;
 import mediaDB.routing.events.files.InteractiveVideoEvent;
 import mediaDB.routing.events.misc.ProducerEvent;
@@ -28,7 +28,7 @@ class InsertModeTest {
     void setUp() {
         eventHandler = mock(EventHandler.class);
         eventFactoryMock = mock(EventFactory.class);
-        eventFactory = new EventFactory();
+        eventFactory = new EventFactory("ipsum");
     }
 
     @Test

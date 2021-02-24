@@ -10,7 +10,7 @@
 <GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
           prefHeight="400.0" prefWidth="500.0" vgap="3.0" xmlns="http://javafx.com/javafx/11.0.1"
           xmlns:fx="http://javafx.com/fxml/1">
-<!--          fx:controller="mediaDB.ui.gui.AddInteractiveVideoController"-->
+<!--          fx:controller="mediaDB.ui.gui.controllers.AddInteractiveVideoController"-->
 
   <columnConstraints>
     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="227.0" minWidth="10.0" prefWidth="144.0" />

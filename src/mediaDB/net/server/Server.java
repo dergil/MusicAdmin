@@ -1,5 +1,6 @@
 package mediaDB.net.server;
 
+import mediaDB.net.EventBus;
 import mediaDB.routing.NetworkEvent;
 import mediaDB.routing.events.misc.ServerResponseEvent;
 
@@ -11,12 +12,12 @@ import java.net.Socket;
 public class Server implements Runnable{
 
     Socket socket;
-    ServerEventBus serverEventBus;
+    EventBus eventBus;
     ToClientMessenger toClientMessenger;
 
-    public Server(Socket socket, ServerEventBus serverEventBus, ToClientMessenger toClientMessenger) {
+    public Server(Socket socket, EventBus eventBus, ToClientMessenger toClientMessenger) {
         this.socket = socket;
-        this.serverEventBus = serverEventBus;
+        this.eventBus = eventBus;
         this.toClientMessenger = toClientMessenger;
     }
 
@@ -42,16 +43,14 @@ public class Server implements Runnable{
         toClientMessenger.setOut(out);
 
         NetworkEvent receivedEvent;
-        receivedEvent = (ServerResponseEvent) in.readObject();
-        String marker = receivedEvent.getEventName();
+//        receivedEvent = (ServerResponseEvent) in.readObject();
+//        String senderName = "server";
         while (true) {
             System.out.println("start of server while loop");
             receivedEvent = (NetworkEvent) in.readObject();
             System.out.println("event received");
-            serverEventBus.onMediaEvent(receivedEvent);
-
-//                  if outputstream empty, send " \n"?
-            toClientMessenger.sendString(marker);
+            eventBus.onMediaEvent(receivedEvent);
+            toClientMessenger.sendString("done", receivedEvent.getSender());
         }
     }
 }

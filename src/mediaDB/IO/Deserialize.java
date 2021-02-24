@@ -1,16 +1,14 @@
 package mediaDB.IO;
 
 import mediaDB.domain_logic.*;
+import mediaDB.domain_logic.file_interfaces.Content;
 import mediaDB.domain_logic.observables.SizeObservable;
 import mediaDB.domain_logic.observables.TagObservable;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
 import mediaDB.domain_logic.producer.ProducerRepository;
 import mediaDB.domain_logic.producer.Uploader;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -46,7 +44,8 @@ public class Deserialize {
         ois=new ObjectInputStream(new FileInputStream(SerFilenames.UPLOADABLELIST.toString()));
         List<Uploadable> uploadableList = deserializeDomainContent.deserializeUploadableList(ois);
         for (Uploadable uploadable : uploadableList){
-            mediaFileRepository.create(uploadable);
+            if (!fileExisting(((Content)uploadable).getAddress()))
+                mediaFileRepository.create(uploadable);
         }
 
         ois=new ObjectInputStream(new FileInputStream(SerFilenames.PRODUCERSET.toString()));
@@ -58,5 +57,9 @@ public class Deserialize {
         ois=new ObjectInputStream(new FileInputStream(SerFilenames.ADDRESSESSET.toString()));
         Set<Integer> integerSet = deserializeDomainContent.deserializeIntegerSet(ois);
         addressRepository.setAddresses(integerSet);
+    }
+
+    private boolean fileExisting(String address){
+        return mediaFileRepository.findByAddress(address) != null;
     }
 }

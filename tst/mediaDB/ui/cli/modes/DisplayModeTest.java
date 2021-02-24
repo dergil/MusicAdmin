@@ -25,7 +25,7 @@ class DisplayModeTest {
     void setUp() {
         eventHandler = mock(EventHandler.class);
         eventFactoryMock = mock(EventFactory.class);
-        eventFactory = new EventFactory();
+        eventFactory = new EventFactory("ipsum");
     }
 
     @Test

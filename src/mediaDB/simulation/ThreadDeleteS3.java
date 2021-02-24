@@ -63,11 +63,4 @@ public class ThreadDeleteS3 extends Thread{
         }
         return lowestCountUploadable;
     }
-
-    private static int getRandomNumberInRange(int max) {
-        if (0 >= max) {
-            throw new IllegalArgumentException("max must be greater than min");
-        }
-        return (int) (Math.random() * ((max) + 1));
-    }
 }

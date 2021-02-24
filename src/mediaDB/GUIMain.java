@@ -2,6 +2,10 @@ package mediaDB;
 
 import java.lang.reflect.Method;
 
+/*
+Quellen:
+https://flicsdb.com/call-main-method-from-another-main-method-in-java/
+ */
 public class GUIMain {
     public static void main(String[] args) {
         try {

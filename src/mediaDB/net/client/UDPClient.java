@@ -73,7 +73,8 @@ public class UDPClient {
         ClientEventBusUDP clientEventBus = new ClientEventBusUDP(udpClient.getSocket(), udpClient.getAddress(), udpClient.getPort());
         EventHandler eventHandler = new EventHandler();
         eventHandler.add(clientEventBus);
-        EventFactory eventFactory = new EventFactory();
+        String clientName = "clientName";
+        EventFactory eventFactory = new EventFactory(clientName);
         InsertMode insertMode = new InsertMode(eventHandler, eventFactory);
         DisplayMode displayMode = new DisplayMode(eventHandler, eventFactory);
         DeletionMode deletionMode = new DeletionMode(eventHandler, eventFactory);

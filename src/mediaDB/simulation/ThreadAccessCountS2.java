@@ -7,6 +7,7 @@ import mediaDB.domain_logic.file_interfaces.Uploadable;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ThreadAccessCountS2 extends Thread {
     final MediaFileRepository mediaFileRepository;
@@ -23,7 +24,7 @@ public class ThreadAccessCountS2 extends Thread {
             uploadables = mediaFileRepository.read();
             int size = uploadables.size();
             if (size > 0)
-                randomInt = getRandomNumberInRange(size);
+                randomInt = ThreadLocalRandom.current().nextInt(size);
             else continue;
             if ((randomInt + 1) < size)
                 pickedFile = uploadables.get(randomInt);
@@ -33,11 +34,7 @@ public class ThreadAccessCountS2 extends Thread {
                 oldCount= ((Content) pickedFile).getAccessCount();
             else continue;
             String address = ((Content) pickedFile).getAddress();
-            try {
-                mediaFileRepository.incrementAccessCount(address);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            mediaFileRepository.incrementAccessCount(address);
             System.out.println("Tried to update access count of " + address + " from " + oldCount + " to " + (oldCount + 1));
 //            synchronized (mediaFileRepository){
 //                try {
@@ -48,12 +45,5 @@ public class ThreadAccessCountS2 extends Thread {
 //            }
 
         }
-    }
-
-    private static int getRandomNumberInRange(int max) {
-        if (0 >= max) {
-            throw new IllegalArgumentException("max must be greater than min");
-        }
-        return (int) (Math.random() * ((max) + 1));
     }
 }

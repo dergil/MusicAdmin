@@ -10,41 +10,50 @@ import java.io.IOException;
 import java.util.List;
 
 public class DisplayEventListener implements EventListener<DisplayEvent> {
-    DisplayModeServer displayModeServer;
+    DisplayModeProcessing displayModeProcessing;
     MediaFileRepository mediaFileRepository;
     ToClientMessenger toClient;
 
-    public DisplayEventListener(DisplayModeServer displayModeServer, MediaFileRepository mediaFileRepository, ToClientMessenger toClient) {
-        this.displayModeServer = displayModeServer;
+    public DisplayEventListener(DisplayModeProcessing displayModeProcessing, MediaFileRepository mediaFileRepository, ToClientMessenger toClient) {
+        this.displayModeProcessing = displayModeProcessing;
         this.mediaFileRepository = mediaFileRepository;
         this.toClient = toClient;
     }
 
     @Override
     public void onMediaEvent(DisplayEvent event) throws IOException {
+        String sender = event.getSender();
         switch (event.getTopic()){
             case "uploader":
-                toClient.sendString(displayModeServer.uploader());
+                sendToClient(displayModeProcessing.uploader(), sender, "producer");
                 break;
             case "content":
                 if (event.getOption() == null){
-                    toClient.sendString(formatList(mediaFileRepository.read()));
+                    sendToClient(displayModeProcessing.content(mediaFileRepository.read()), sender, "uploadables");
                 }
-                else toClient.sendString(displayModeServer.content(mediaFileRepository.read(), event.getOption()));
+                else sendToClient(displayModeProcessing.content(mediaFileRepository.read(), event.getOption()), sender, "content");
                 break;
             case "tag":
                 String assigned = event.getOption();
                 if (!assigned.equals("i") && !assigned.equals("e")){
-                    toClient.sendString("Argument must be i or e");
+                    sendToClient("Argument must be i or e", sender, "tag");
                     break;
                 }
-                toClient.sendString(displayModeServer.tag(assigned));
+                sendToClient(displayModeProcessing.tag(assigned), sender, "tag");
+                break;
+            case "wholeUploads":
+                sendToClient(formatList(mediaFileRepository.read()), sender, "wholeUploads");
                 break;
             default:
                 throw new IllegalArgumentException("Unknown display option");
 
         }
+    }
 
+    private void sendToClient(String message, String sender, String type) throws IOException {
+        if (sender.equals("gui"))
+            toClient.sendToGUI(message, sender, type);
+        else toClient.sendTypedString(message, sender, type);
     }
 
     private String  formatList(List<Uploadable> uploadableList){

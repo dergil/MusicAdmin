@@ -2,21 +2,14 @@ package mediaDB.simulation;
 
 
 import mediaDB.domain_logic.*;
-import mediaDB.domain_logic.listener.display.DisplayEventListener;
-import mediaDB.domain_logic.listener.display.DisplayModeServer;
-import mediaDB.domain_logic.listener.display.GenerateDisplayContent;
-import mediaDB.domain_logic.listener.files.*;
 import mediaDB.domain_logic.observables.SizeObservable;
 import mediaDB.domain_logic.observables.TagObservable;
-import mediaDB.domain_logic.listener.*;
+import mediaDB.domain_logic.observables.UploadsObservable;
 import mediaDB.domain_logic.producer.ProducerRepository;
-import mediaDB.net.server.ServerEventBus;
 import mediaDB.net.server.ToClientMessenger;
-import mediaDB.ui.cli.CLIAdmin;
-import mediaDB.ui.cli.EventFactory;
-import mediaDB.ui.cli.modes.*;
 import mediaDB.observer.SizeObserver;
 import mediaDB.observer.TagObserver;
+import mediaDB.observer.UploadsObserver;
 
 import java.io.FileNotFoundException;
 
@@ -26,8 +19,14 @@ public class Simulation2 {
         ToClientMessenger toClient= new ToClientMessenger();
         SizeObservable sizeObservable = new SizeObservable();
         TagObservable tagObservable = new TagObservable();
+        UploadsObservable uploadsObservable = new UploadsObservable();
         MediaFileRepository mediaFileRepository  = new MediaFileRepository(toClient, sizeObservable, tagObservable);
+        mediaFileRepository.setUploadsObservable(uploadsObservable);
         ProducerRepository producerRepository = new ProducerRepository();
+
+//        Observer for uploads
+//        UploadsObserver uploadsObserver = new UploadsObserver(uploadsObservable, mediaFileRepository);
+//        uploadsObservable.register(uploadsObserver);
 //        AddressRepository addressRepository = new AddressRepository();
 //        MediaFileFactory mediaFileFactory = new MediaFileFactory(mediaFileRepository, addressRepository);
 //

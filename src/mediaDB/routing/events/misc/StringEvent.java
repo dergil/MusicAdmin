@@ -9,12 +9,14 @@ public class StringEvent extends EventObject implements NetworkEvent, Serializab
     String mode;
     String command;
     String option;
+    private String sender;
 
-    public StringEvent(Object source, String mode, String command, String option) {
+    public StringEvent(Object source, String mode, String command, String option, String sender) {
         super(source);
         this.mode = mode;
         this.command = command;
         this.option = option;
+        this.sender = sender;
     }
 
     public String getMode() {
@@ -34,4 +36,8 @@ public class StringEvent extends EventObject implements NetworkEvent, Serializab
         return "StringEvent";
     }
 
+    @Override
+    public String getSender() {
+        return sender;
+    }
 }

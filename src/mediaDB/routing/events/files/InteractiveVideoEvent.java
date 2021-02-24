@@ -1,5 +1,6 @@
 package mediaDB.routing.events.files;
 
+import mediaDB.domain_logic.enums.MediaTypes;
 import mediaDB.domain_logic.enums.Tag;
 import mediaDB.routing.NetworkEvent;
 
@@ -18,10 +19,10 @@ public class InteractiveVideoEvent extends EventObject implements NetworkEvent, 
     private Duration length;
     private Collection<Tag> tags;
     private String uploader;
+    private String sender;
 
-    public InteractiveVideoEvent(Object o, String fileType, String type, int width, int height, String encoding, long bitrate,
-                                 Duration length, Collection<Tag> tags, String uploader) {
-        super(o);
+    public InteractiveVideoEvent(Object source, String fileType, String type, int width, int height, String encoding, long bitrate, Duration length, Collection<Tag> tags, String uploader, String sender) {
+        super(source);
         this.fileType = fileType;
         this.type = type;
         this.width = width;
@@ -31,6 +32,7 @@ public class InteractiveVideoEvent extends EventObject implements NetworkEvent, 
         this.length = length;
         this.tags = tags;
         this.uploader = uploader;
+        this.sender = sender;
     }
 
     public String getFileType() {
@@ -71,7 +73,12 @@ public class InteractiveVideoEvent extends EventObject implements NetworkEvent, 
 
     @Override
     public String getEventName() {
-        return "InteractiveVideoEvent";
+        return MediaTypes.INTERACTIVEVIDEO.toString() + "Event";
+    }
+
+    @Override
+    public String getSender() {
+        return sender;
     }
 
 }

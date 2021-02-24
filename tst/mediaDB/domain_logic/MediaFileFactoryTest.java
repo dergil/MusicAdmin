@@ -1,6 +1,6 @@
 package mediaDB.domain_logic;
 
-import mediaDB.MediaTypesTest;
+import for_testing.MediaTypesTest;
 import mediaDB.domain_logic.enums.Tag;
 import mediaDB.domain_logic.observables.SizeObservable;
 import mediaDB.domain_logic.observables.TagObservable;
@@ -42,7 +42,7 @@ class MediaFileFactoryTest {
     @BeforeEach
     void setUp() {
         mediaFileRepository = new MediaFileRepository(new ToClientMessenger(), new SizeObservable(), new TagObservable());
-        mediaFileFactory = new MediaFileFactory(mediaFileRepository, addressRepository);
+        mediaFileFactory = new MediaFileFactory(mediaFileRepository, addressRepository, new ToClientMessenger());
         when(addressRepository.nextAddress()).thenReturn("1");
         al.add(Tag.Animal);
     }

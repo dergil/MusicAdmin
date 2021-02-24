@@ -1,5 +1,6 @@
 package mediaDB.routing.events.files;
 
+import mediaDB.domain_logic.enums.MediaTypes;
 import mediaDB.domain_logic.enums.Tag;
 import mediaDB.routing.NetworkEvent;
 
@@ -19,9 +20,9 @@ public class AudioVideoEvent extends EventObject implements NetworkEvent, Serial
     private long bitrate;
     private Duration length;
     private String uploader;
+    private String sender;
 
-    public AudioVideoEvent(Object source, String fileType, int samplingRate, int width, int height,
-                           String encoding, Collection<Tag> tags, long bitrate, Duration length, String uploader) {
+    public AudioVideoEvent(Object source, String fileType, int samplingRate, int width, int height, String encoding, Collection<Tag> tags, long bitrate, Duration length, String uploader, String sender) {
         super(source);
         this.fileType = fileType;
         this.samplingRate = samplingRate;
@@ -32,6 +33,7 @@ public class AudioVideoEvent extends EventObject implements NetworkEvent, Serial
         this.bitrate = bitrate;
         this.length = length;
         this.uploader = uploader;
+        this.sender = sender;
     }
 
     public String getFileType() {
@@ -72,7 +74,12 @@ public class AudioVideoEvent extends EventObject implements NetworkEvent, Serial
 
     @Override
     public String getEventName() {
-        return "AudioVideoEvent";
+        return MediaTypes.AUDIOVIDEO.toString() + "Event";
+    }
+
+    @Override
+    public String getSender() {
+        return sender;
     }
 
 }

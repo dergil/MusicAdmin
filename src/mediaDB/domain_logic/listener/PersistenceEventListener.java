@@ -6,6 +6,7 @@ import mediaDB.IO.RandomAccess;
 import mediaDB.IO.Serialize;
 import mediaDB.domain_logic.MediaFileRepository;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
+import mediaDB.net.server.ToClientMessenger;
 import mediaDB.routing.EventListener;
 import mediaDB.routing.events.misc.PersistenceEvent;
 import mediaDB.ui.Numerical;
@@ -19,36 +20,19 @@ public class PersistenceEventListener implements EventListener<PersistenceEvent>
     Deserialize deserialize;
     DeserializeDomainContent deserializeDomainContent;
     RandomAccess randomAccess;
+    ToClientMessenger toClient;
 
-    public PersistenceEventListener(MediaFileRepository mediaFileRepository, Serialize serialize, Deserialize deserialize, DeserializeDomainContent deserializeDomainContent, RandomAccess randomAccess) {
+    public PersistenceEventListener(MediaFileRepository mediaFileRepository, Serialize serialize, Deserialize deserialize, DeserializeDomainContent deserializeDomainContent, RandomAccess randomAccess, ToClientMessenger toClient) {
         this.mediaFileRepository = mediaFileRepository;
         this.serialize = serialize;
         this.deserialize = deserialize;
         this.deserializeDomainContent = deserializeDomainContent;
         this.randomAccess = randomAccess;
+        this.toClient = toClient;
     }
-
 
     @Override
     public void onMediaEvent(PersistenceEvent event) throws IOException {
-//        if (splitInput[0].equals("saveJOS")) {
-//            serialize.serialize();
-//            return;
-//        }
-//        if (splitInput[0].equals("loadJOS")) {
-//            deserialize.deserialzie();
-//            return;
-//        }
-//        if (splitInput[0].equals("save") && Numerical.isNumerical(splitInput[1])) {
-//            if (randomAccess.isEmpty()){
-//                saveMediaFileRepositoryInRandomAccessList();
-//                return;
-//            }
-//            Uploadable uploadable = mediaFileRepository.findByAddress(splitInput[1]);
-//            if (uploadable != null)
-//                randomAccess.save(uploadable);
-//        }
-
         String option = event.getOption();
         switch (event.getCommand()){
             case "saveJOS":
@@ -56,6 +40,7 @@ public class PersistenceEventListener implements EventListener<PersistenceEvent>
                 break;
             case "loadJOS":
                 deserialize.deserialize();
+                toClient.dataChange();
                 break;
             case "save":
                 if (option != null && Numerical.isNumerical(option)){
@@ -70,11 +55,14 @@ public class PersistenceEventListener implements EventListener<PersistenceEvent>
                 else System.out.println("Syntax error");
                 break;
             case "load":
-                if (option != null && Numerical.isNumerical(option)){
+                if (option != null && Numerical.isNumerical(option) && !fileExisting(option)){
                     try {
                         Uploadable loadedFile = randomAccess.load(option);
-                        if (loadedFile != null)
+                        if (loadedFile != null){
                             mediaFileRepository.create(loadedFile);
+                            toClient.dataChange();
+                        }
+
                     } catch (ClassNotFoundException e){
                         e.printStackTrace();
                     }
@@ -84,6 +72,10 @@ public class PersistenceEventListener implements EventListener<PersistenceEvent>
             default:
                 System.out.println("Syntax error.");
         }
+    }
+
+    private boolean fileExisting(String address){
+        return mediaFileRepository.findByAddress(address) != null;
     }
 
     private void saveMediaFileRepositoryInRandomAccessList() throws IOException {

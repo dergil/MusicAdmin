@@ -22,7 +22,8 @@ public class Client2 {
             ClientEventBus clientEventBus = new ClientEventBus(out);
             EventHandler eventHandler = new EventHandler();
             eventHandler.add(clientEventBus);
-            EventFactory eventFactory = new EventFactory();
+            String clientName = "client2";
+            EventFactory eventFactory = new EventFactory(clientName);
             InsertMode insertMode = new InsertMode(eventHandler, eventFactory);
             DisplayMode displayMode = new DisplayMode(eventHandler, eventFactory);
             DeletionMode deletionMode = new DeletionMode(eventHandler, eventFactory);
@@ -31,7 +32,7 @@ public class Client2 {
             CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode, persistenceMode);
 
             String marker = "client2";
-            ServerResponseEvent markerEvent = eventFactory.serverResponseEvent(marker);
+            ServerResponseEvent markerEvent = eventFactory.serverResponseEvent("none", marker);
             out.writeObject(markerEvent);
 
             cliAdmin.start();

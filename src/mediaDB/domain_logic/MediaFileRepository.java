@@ -5,6 +5,7 @@ import mediaDB.domain_logic.observables.TagObservable;
 import mediaDB.domain_logic.file_interfaces.Content;
 import mediaDB.domain_logic.file_interfaces.MediaContent;
 import mediaDB.domain_logic.file_interfaces.Uploadable;
+import mediaDB.domain_logic.observables.UploadsObservable;
 import mediaDB.net.server.ToClientMessenger;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class MediaFileRepository {
 //    TODO: nullpointer, when MAX_CAPACITY is set via constructor
     private SizeObservable sizeObservable;
     private TagObservable tagObservable;
+    private UploadsObservable uploadsObservable;
     List<Uploadable> mediaFiles = Collections.synchronizedList(new ArrayList<>());
 
     public MediaFileRepository(ToClientMessenger toClient, SizeObservable sizeObservable, TagObservable tagObservable) {
@@ -30,6 +32,7 @@ public class MediaFileRepository {
         mediaFiles.add(mediaFile);
         sizeObservable.addSize(((MediaContent)mediaFile).getSize());
         tagObservable.add(((Content) mediaFile).getTags());
+        changeInUploads("File added", ((MediaContent) mediaFile).getAddress());
     }
 
     public synchronized List<Uploadable> read(){
@@ -40,6 +43,7 @@ public class MediaFileRepository {
         mediaFiles.remove(mediaFile);
         sizeObservable.subtractSize(((MediaContent)mediaFile).getSize());
         tagObservable.remove(((Content) mediaFile).getTags());
+        changeInUploads("File deleted", ((MediaContent) mediaFile).getAddress());
     }
 
     public synchronized void delete(String address){
@@ -48,6 +52,7 @@ public class MediaFileRepository {
         mediaFiles.remove(mediaFile);
         sizeObservable.subtractSize(((MediaContent)mediaFile).getSize());
         tagObservable.remove(((Content) mediaFile).getTags());
+        changeInUploads("File deleted", address);
     }
 
     public synchronized Uploadable findByAddress(String address){
@@ -57,7 +62,7 @@ public class MediaFileRepository {
         return null;
     }
 
-    protected synchronized boolean contains(String address){
+    public synchronized boolean contains(String address){
         for (Uploadable uploadable: mediaFiles){
             if (((Content)uploadable).getAddress().equals(address))
                 return true;
@@ -69,32 +74,41 @@ public class MediaFileRepository {
         return sizeObservable.capacityAvailable(size);
     }
 
-    protected synchronized boolean contains(Uploadable uploadable){
+    public synchronized boolean contains(Uploadable uploadable){
         return mediaFiles.contains(uploadable);
     }
 
-    public synchronized void incrementAccessCount(String address) throws IOException {
+    public synchronized void incrementAccessCount(String address) {
         if (contains(address)){
             Uploadable file = findByAddress(address);
             Content content = ((Content)file);
             content.setAccessCount(content.getAccessCount() + 1);
+            changeInUploads("Access count changed", address);
         }
-        else toClient.fileNotListet();
+//        TODO: antwort geben?
+//        else toClient.fileNotListet();
     }
 
 //    TODO: call by value, call by reference? (testen)
-    public synchronized void incrementAccessCount(Uploadable file) throws IOException {
+    public synchronized void incrementAccessCount(Uploadable file) {
         if (contains(file)){
             Content content = ((Content)file);
             content.setAccessCount(content.getAccessCount() + 1);
+            changeInUploads("Access count changed", ((Content) file).getAddress());
         }
-        else toClient.fileNotListet();
+//        else toClient.fileNotListet();
     }
 
-    protected synchronized void incrementAccessCountForList(List<Uploadable> list) throws IOException {
+    public synchronized void incrementAccessCountForList(List<Uploadable> list) {
         for (Uploadable uploadable : list){
             incrementAccessCount(uploadable);
         }
+//        changeInUploads();
+    }
+
+    private synchronized void changeInUploads(String type, String address){
+//        if (uploadsObservable != null)
+//            uploadsObservable.change(type, address);
     }
 
     public TagObservable getTagObservable() {
@@ -107,5 +121,9 @@ public class MediaFileRepository {
 
     public void setMediaFiles(List<Uploadable> mediaFiles) {
         this.mediaFiles = mediaFiles;
+    }
+
+    public void setUploadsObservable(UploadsObservable uploadsObservable) {
+        this.uploadsObservable = uploadsObservable;
     }
 }

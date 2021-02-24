@@ -39,11 +39,11 @@ public class ThreadCreateS2 extends Thread {
                 if (random.nextBoolean()) {
                     interactiveVideoFile = randomFiles.randomInteractiveVideoFile();
                     mediaFileRepository.create(interactiveVideoFile);
-                    System.out.println("Added " + interactiveVideoFile.toString());
+                    System.out.println("Tried to add  " + interactiveVideoFile.toString());
                 } else {
                     licensedAudioVideoFile = randomFiles.randomLicensedAudioVideoFile();
                     mediaFileRepository.create(licensedAudioVideoFile);
-                    System.out.println("Added " + licensedAudioVideoFile.toString());
+                    System.out.println("Tried to add  " + licensedAudioVideoFile.toString());
                 }
             }
             doneSignal.countDown();
@@ -57,7 +57,7 @@ public class ThreadCreateS2 extends Thread {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("Added " + interactiveVideoFile.toString() + " " + interactiveVideoFile.getAddress());
+                        System.out.println("Tried to add  " + interactiveVideoFile.toString() + " " + interactiveVideoFile.getAddress());
                     } else {
                         licensedAudioVideoFile = randomFiles.randomLicensedAudioVideoFile();
                         try {
@@ -65,7 +65,7 @@ public class ThreadCreateS2 extends Thread {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("Added " + licensedAudioVideoFile.toString() + " " + licensedAudioVideoFile.getAddress());
+                        System.out.println("Tried to add  " + licensedAudioVideoFile.toString() + " " + licensedAudioVideoFile.getAddress());
                     }
 //                    synchronized (mediaFileRepository){
 //                        try {

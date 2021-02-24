@@ -31,7 +31,7 @@ class ChangeModeTest {
     void setUp() {
         eventHandler = new EventHandler();
         spyEventHandler = spy(eventHandler);
-        eventFactory = new EventFactory();
+        eventFactory = new EventFactory("ipsum");
         spyEventFactory = spy(eventFactory);
         changeMode = new ChangeMode(spyEventHandler, spyEventFactory);
     }

@@ -29,3 +29,19 @@ Exceptions, die über die ganze hierarchie gehen, können an Stelle der Entstehu
 GUI
 * muss über events gehen, um IoC zu sichern
 * wohl aber nicht übers netzwerk
+
+Idee für Zusätzliche Anforderungen:
+* NetworkEvent bekommt ein Absenderfeld
+* wird an ToClientMessender übergeben
+* Da steht gehardcoded, an welche socket o.ä. das Antwortevent gehen soll
+    * jetzt so umgesetzt, dass an alle tcp sockets alles gesendet wird
+    * client kann in serverresponseevent absender abrufen
+* Falls GUIOut gesetzt ist, wird bei jeder Änderung an uploads oder producern eine Nachricht an die GUI gesendet
+* Die holt sich dann die aktuellen Listen
+* je view gibt es eine eventfactory, die mit dem Schlüsselwort konstruiert wird
+
+serverresponseevent hat type bekommen
+    darüber kann die gui rausfinden, was für eine Liste das ist, und wie sie verarbeitet werden soll
+    uploadables und producer im normalen Fenster, uploader, content tag aus display mode in extra Fenster
+    Eventannahme wie in client von net
+    kann direkt zum ServerResponseEventListener weitergeleitet werden

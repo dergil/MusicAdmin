@@ -21,7 +21,7 @@ public class CLIAdmin {
         this.persistenceMode = persistenceMode;
     }
 
-    public void start() throws IOException, ClassNotFoundException {
+    public void start() throws IOException {
         Console.greeting();
         String input;
         while (true){
@@ -35,7 +35,7 @@ public class CLIAdmin {
         }
     }
 
-    private void modes(String mode) throws IOException, ClassNotFoundException {
+    private void modes(String mode) throws IOException {
         switch (mode){
             case ":c":
                 insertMode.start();
