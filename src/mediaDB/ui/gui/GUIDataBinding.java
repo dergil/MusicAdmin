@@ -26,7 +26,6 @@ import mediaDB.net.EventBus;
 import mediaDB.net.server.ToClientMessenger;
 import mediaDB.routing.EventHandler;
 import mediaDB.ui.cli.EventFactory;
-import mediaDB.ui.gui.to_remove.GUIPersist;
 
 import java.io.RandomAccessFile;
 import java.util.ArrayList;

@@ -34,7 +34,7 @@ public class EventBus implements EventListener<NetworkEvent>{
 //    }
 
     @Override
-    public void onMediaEvent(NetworkEvent event) throws IOException {
+    public synchronized void onMediaEvent(NetworkEvent event) throws IOException {
         for (EventListener<NetworkEvent> listener : listeners) {
             if(listener.supports(event.getClass())){
                 listener.onMediaEvent(event);

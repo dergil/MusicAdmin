@@ -8,7 +8,7 @@ import mediaDB.routing.events.misc.DisplayEvent;
 import mediaDB.ui.cli.EventFactory;
 
 public class DisplayTagsController {
-    public TextField nameTextField;
+    TextField nameTextField;
     String type = null;
 
     EventFactory eventFactory;

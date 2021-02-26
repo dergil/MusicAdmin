@@ -9,8 +9,6 @@ https://stackoverflow.com/questions/30814258/javafx-pass-parameters-while-instan
 
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,7 +23,6 @@ import mediaDB.IO.*;
 import mediaDB.domain_logic.AddressRepository;
 import mediaDB.domain_logic.MediaFileFactory;
 import mediaDB.domain_logic.MediaFileRepository;
-import mediaDB.domain_logic.file_interfaces.Uploadable;
 import mediaDB.domain_logic.listener.PersistenceEventListener;
 import mediaDB.domain_logic.listener.ProducerEventListener;
 import mediaDB.domain_logic.listener.StringEventListener;
@@ -37,7 +34,6 @@ import mediaDB.domain_logic.observables.SizeObservable;
 import mediaDB.domain_logic.observables.TagObservable;
 import mediaDB.domain_logic.producer.ProducerRepository;
 import javafx.event.EventHandler;
-import mediaDB.domain_logic.producer.Uploader;
 import mediaDB.net.EventBus;
 import mediaDB.net.server.ToClientMessenger;
 import mediaDB.routing.events.misc.ProducerEvent;
@@ -45,12 +41,13 @@ import mediaDB.routing.events.misc.StringEvent;
 import mediaDB.ui.cli.EventFactory;
 import mediaDB.ui.gui.controllers.*;
 import mediaDB.ui.gui.listeners.ServerResponseEventListener;
-import mediaDB.ui.gui.to_remove.GUIPersist;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
+//todo: Klasse weiter aufteilen für Optimierung Zuständigkeit
+//todo: Notiz bei alles GUI mains, dass evtl. proxy main verwendet werden muss
 
+// Bei einem Teil der Buttons muss ein Element aus einer Liste ausgewählt sein
 public class InternalGUIMain extends Application {
     ListView<String> uploadsListView;
     ListView<String> producerListView;
@@ -137,7 +134,8 @@ public class InternalGUIMain extends Application {
         Button displayUploadsByType = new Button("Display uploads by type");
         Button displayTagsByType = new Button("Display tags");
 
-        SortUploads sortUploads = new SortUploads();
+        ExtractDataFromString extractDataFromString = new ExtractDataFromString();
+        SortUploads sortUploads = new SortUploads(extractDataFromString);
 
         addAudioButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -326,7 +324,7 @@ public class InternalGUIMain extends Application {
             int selectedFile = uploadsListView.getSelectionModel().getSelectedIndex();
             System.out.println(uploadsListView.getItems().toString());
             String uploadString = uploadsListView.getItems().get(selectedFile);
-            String address = String.valueOf(sortUploads.getAddress(uploadString));
+            String address = String.valueOf(extractDataFromString.getAddress(uploadString));
             System.out.println(address);
             try {
                 eventHandler.handle(guiEventFactory.stringEvent("Deletion", "address", address));
@@ -339,7 +337,7 @@ public class InternalGUIMain extends Application {
             int selectedProducer = producerListView.getSelectionModel().getSelectedIndex();
             System.out.println(producerListView.getItems().toString());
             String producerString = producerListView.getItems().get(selectedProducer);
-            String producer = sortUploads.getProducerDisplayVersion(producerString);
+            String producer = extractDataFromString.getProducerDisplayVersion(producerString);
             ProducerEvent event = guiEventFactory.producerEvent(producer, "remove");
             try {
                 eventHandler.handle(event);
@@ -352,7 +350,7 @@ public class InternalGUIMain extends Application {
             int selectedFile = uploadsListView.getSelectionModel().getSelectedIndex();
             System.out.println(uploadsListView.getItems().toString());
             String uploadString = uploadsListView.getItems().get(selectedFile);
-            String address = String.valueOf(sortUploads.getAddress(uploadString));
+            String address = String.valueOf(extractDataFromString.getAddress(uploadString));
             StringEvent stringEvent = guiEventFactory.stringEvent("Change", "address", address);
             try {
                 eventHandler.handle(stringEvent);

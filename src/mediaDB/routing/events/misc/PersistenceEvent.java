@@ -19,7 +19,7 @@ public class PersistenceEvent extends EventObject implements NetworkEvent, Seria
 
     @Override
     public String getEventName() {
-        return null;
+        return "PersistenceEvent";
     }
 
     public String getOption() {

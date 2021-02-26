@@ -10,6 +10,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SortUploads {
+    ExtractDataFromString extractDataFromString;
+
+    public SortUploads(ExtractDataFromString extractDataFromString) {
+        this.extractDataFromString = extractDataFromString;
+    }
+
     public void producer(ListView<String> uploadsListView){
         ObservableList<String> current = uploadsListView.getItems();
         ObservableList<String> sorted = FXCollections.observableArrayList();
@@ -17,8 +23,8 @@ public class SortUploads {
         for (int i = 0; i < size; i++) {
             String uploadWithSmallesProducer = current.get(0);
             for (String string : current){
-                String currentSmallestProducer = getProducer(uploadWithSmallesProducer);
-                if (getProducer(string).compareTo(currentSmallestProducer) < 0)
+                String currentSmallestProducer = extractDataFromString.getProducer(uploadWithSmallesProducer);
+                if (extractDataFromString.getProducer(string).compareTo(currentSmallestProducer) < 0)
                     uploadWithSmallesProducer = string;
             }
             current.remove(uploadWithSmallesProducer);
@@ -34,8 +40,8 @@ public class SortUploads {
         for (int i = 0; i < size; i++) {
             String uploadWithSmallestAccessCount = current.get(0);
             for (String string : current){
-                int currentSmallestCount = getAccessCount(uploadWithSmallestAccessCount);
-                if (getAccessCount(string) < currentSmallestCount)
+                int currentSmallestCount = extractDataFromString.getAccessCount(uploadWithSmallestAccessCount);
+                if (extractDataFromString.getAccessCount(string) < currentSmallestCount)
                     uploadWithSmallestAccessCount = string;
             }
             current.remove(uploadWithSmallestAccessCount);
@@ -51,8 +57,8 @@ public class SortUploads {
         for (int i = 0; i < size; i++) {
             String uploadWithSmallestAddress = current.get(0);
             for (String string : current){
-                int  currentSmallestAddress = getAddress(uploadWithSmallestAddress);
-                if (getAddress(string) < currentSmallestAddress)
+                int  currentSmallestAddress = extractDataFromString.getAddress(uploadWithSmallestAddress);
+                if (extractDataFromString.getAddress(string) < currentSmallestAddress)
                     uploadWithSmallestAddress = string;
             }
             current.remove(uploadWithSmallestAddress);
@@ -61,68 +67,30 @@ public class SortUploads {
         uploadsListView.setItems(sorted);
     }
 
-    public int getAddress(String upload){
-        int beginindex = upload.lastIndexOf("address='") + 9;
-        String address = "";
-        String currentChar = "";
-        do {
-            currentChar = upload.substring(beginindex, beginindex + 1);
-            address = address.concat(currentChar);
-            beginindex++;
-        } while (Numerical.isNumerical(currentChar));
-        address = address.replaceAll("'", "");
-        return Integer.parseInt(address);
-    }
-
-    public String getAddressDisplayVersion(String upload){
-        String[] uploads = upload.split("\t");
-        System.out.println(uploads[1]);
-        return uploads[1];
-    }
+//    public String getAddressDisplayVersion(String upload){
+//        String[] uploads = upload.split("\t");
+//        System.out.println(uploads[1]);
+//        return uploads[1];
+//    }
 
 
-    public int getAccessCount(String upload){
-    int beginindex = upload.lastIndexOf("accessCount=") + 12;
-    String accessCount = "";
-    String currentChar = "";
-    do {
-        currentChar = upload.substring(beginindex, beginindex + 1);
-        accessCount = accessCount.concat(currentChar);
-        beginindex++;
-    } while (Numerical.isNumerical(currentChar));
-    accessCount = accessCount.replaceAll(",", "");
-    return Integer.parseInt(accessCount);
-    }
-
-    public int getAccessCountDisplayVersion(String upload){
-        String count = upload.split("\t")[3];
-        System.out.println(count);
-        return Integer.parseInt(count);
-    }
 
 
-    public String getProducer(String upload){
-    int beginindex = upload.lastIndexOf("name='") + 6;
-    String producer = "";
-    String currentChar = "";
-    do {
-        currentChar = upload.substring(beginindex, beginindex + 1);
-        producer = producer.concat(currentChar);
-        beginindex++;
-    } while (!currentChar.equals("'"));
-    producer = producer.replaceAll("'", "");
-    return producer;
-    }
-
-    public String getProducerFromUploadString(String upload){
-        String producer = upload.split("\t")[2];
-        System.out.println(producer);
-        return producer;
-    }
+//    public int getAccessCountDisplayVersion(String upload){
+//        String count = upload.split("\t")[3];
+//        System.out.println(count);
+//        return Integer.parseInt(count);
+//    }
 
 
-        public String getProducerDisplayVersion(String upload){
-        int lastChar = upload.indexOf("=");
-        return upload.substring(0, lastChar);
-    }
+
+
+//    public String getProducerFromUploadString(String upload){
+//        String producer = upload.split("\t")[2];
+//        System.out.println(producer);
+//        return producer;
+//    }
+
+
+
 }

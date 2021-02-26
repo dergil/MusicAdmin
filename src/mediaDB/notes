@@ -45,3 +45,25 @@ serverresponseevent hat type bekommen
     uploadables und producer im normalen Fenster, uploader, content tag aus display mode in extra Fenster
     Eventannahme wie in client von net
     kann direkt zum ServerResponseEventListener weitergeleitet werden
+
+
+Finale Aufgaben um Funktionalität zu sichern:
+* Nötige mains identifizieren, in extra Ordner packen
+* Nötige Argumente auslesen (Size, UDP)
+* Testen versch. Eingaben in cli und gui
+
+
+
+listeners.for!!!!!!!!!!!!!!!!!!!!!!!
+
+
+random access file
+muss nach Neustart der app funzen, dass es keine inkonsistenzen gibt
+wenn daten geholt / gespiechert werden, repo layer benutzen
+
+
+checked exceptions = erwartete exc.
+
+current offset rei RAf serialisieren
+
+listener -> eventBus -> serverresponseeventlistener -> net

@@ -24,7 +24,7 @@ public class AddAudioController {
 
     EventFactory eventFactory;
     EventHandler eventHandler;
-
+//todo: Klasse testbar?
     public AddAudioController(EventFactory eventFactory, EventHandler eventHandler) {
         this.eventFactory = eventFactory;
         this.eventHandler = eventHandler;

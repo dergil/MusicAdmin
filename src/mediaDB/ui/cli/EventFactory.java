@@ -8,10 +8,10 @@ import java.time.Duration;
 import java.util.Collection;
 
 public class EventFactory {
-    private String sender;
+    private String session;
 
-    public EventFactory(String sender) {
-        this.sender = sender;
+    public EventFactory(String session) {
+        this.session = session;
     }
 
     public AudioEvent audioEvent(String[] input){
@@ -22,7 +22,7 @@ public class EventFactory {
         Duration length = Duration.ofSeconds(Long.parseLong(input[4]));
         String encoding = input[5];
         int samplingRate = Integer.parseInt(input[6]);
-        return new AudioEvent(this, fileType, samplingRate, encoding, tags, bitrate, length, uploader, sender);
+        return new AudioEvent(this, fileType, samplingRate, encoding, tags, bitrate, length, uploader, session);
     }
 
     public AudioVideoEvent audioVideoEvent(String[] input){
@@ -35,7 +35,7 @@ public class EventFactory {
         int height = Integer.parseInt(input[6]);
         int width = Integer.parseInt(input[7]);
         int samplingRate = Integer.parseInt(input[8]);
-        return new AudioVideoEvent(this, fileType, samplingRate, width, height, encoding, tags, bitrate, length, uploader, sender);
+        return new AudioVideoEvent(this, fileType, samplingRate, width, height, encoding, tags, bitrate, length, uploader, session);
     }
 
     public InteractiveVideoEvent interactiveVideoEvent(String[] input){
@@ -48,7 +48,7 @@ public class EventFactory {
         int height = Integer.parseInt(input[6]);
         int width = Integer.parseInt(input[7]);
         String type = input[8];
-        return new InteractiveVideoEvent(this, fileType, type, width, height, encoding, bitrate, length, tags, uploader, sender);
+        return new InteractiveVideoEvent(this, fileType, type, width, height, encoding, bitrate, length, tags, uploader, session);
     }
 
     public LicensedAudioEvent licensedAudioEvent(String[] input){
@@ -60,7 +60,7 @@ public class EventFactory {
         String encoding = input[5];
         int samplingRate = Integer.parseInt(input[6]);
         String holder = input[7];
-        return new LicensedAudioEvent(this, fileType, samplingRate, encoding, tags, holder, bitrate, length, uploader, sender);
+        return new LicensedAudioEvent(this, fileType, samplingRate, encoding, tags, holder, bitrate, length, uploader, session);
     }
 
     public LicensedAudioVideoEvent licensedAudioVideoEvent(String[] input){
@@ -74,7 +74,7 @@ public class EventFactory {
         int width = Integer.parseInt(input[7]);
         int samplingRate = Integer.parseInt(input[8]);
         String holder = input[9];
-        return new LicensedAudioVideoEvent(this, fileType, samplingRate, width, height, encoding, holder, bitrate, length, tags, uploader, sender);
+        return new LicensedAudioVideoEvent(this, fileType, samplingRate, width, height, encoding, holder, bitrate, length, tags, uploader, session);
     }
 
     public LicensedVideoEvent licensedVideoEvent(String[] input){
@@ -87,26 +87,26 @@ public class EventFactory {
         int height = Integer.parseInt(input[6]);
         int width = Integer.parseInt(input[7]);
         String holder = input[8];
-        return new LicensedVideoEvent(this, fileType, width, height, encoding, tags, holder, bitrate, length, uploader, sender);
+        return new LicensedVideoEvent(this, fileType, width, height, encoding, tags, holder, bitrate, length, uploader, session);
     }
 
     public StringEvent stringEvent(String mode, String command, String option){
-        return new StringEvent(this, mode, command, option, sender);
+        return new StringEvent(this, mode, command, option, session);
     }
 
     public ProducerEvent producerEvent(String name, String command) {
-        return new ProducerEvent(this, command, name, sender);
+        return new ProducerEvent(this, command, name, session);
     }
 
     public DisplayEvent displayEvent(String topic, String option){
-        return new DisplayEvent(this, topic, option, sender);
+        return new DisplayEvent(this, topic, option, session);
     }
 
     public PersistenceEvent persistenceEvent(String command, String option){
-        return new PersistenceEvent(this, command, option, sender);
+        return new PersistenceEvent(this, command, option, session);
     }
 
     public ServerResponseEvent serverResponseEvent(String type, String response){
-        return new ServerResponseEvent(this, type, response, sender);
+        return new ServerResponseEvent(this, type, response, session);
     }
 }

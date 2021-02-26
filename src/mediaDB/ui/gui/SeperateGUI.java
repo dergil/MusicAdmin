@@ -33,11 +33,11 @@ import mediaDB.routing.events.misc.StringEvent;
 import mediaDB.ui.cli.EventFactory;
 import mediaDB.ui.gui.controllers.*;
 import mediaDB.ui.gui.listeners.ServerResponseEventListener;
-import mediaDB.ui.gui.to_remove.GUIPersist;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+//todo: Klasse weiter aufteilen für Optimierung Zuständigkeit
 
 public class SeperateGUI extends Application {
     ListView<String> uploadsListView;
@@ -129,7 +129,8 @@ public class SeperateGUI extends Application {
         Button displayUploadsByType = new Button("Display uploads by type");
         Button displayTagsByType = new Button("Display tags");
 
-        SortUploads sortUploads = new SortUploads();
+        ExtractDataFromString extractDataFromString = new ExtractDataFromString();
+        SortUploads sortUploads = new SortUploads(extractDataFromString);
 
         addAudioButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -316,10 +317,8 @@ public class SeperateGUI extends Application {
 //TODO: Trennung GUI GL überprüfen (keine referenz auf mediaRepo
         deleteUpload.setOnAction(event -> {
             int selectedFile = uploadsListView.getSelectionModel().getSelectedIndex();
-            System.out.println(uploadsListView.getItems().toString());
             String uploadString = uploadsListView.getItems().get(selectedFile);
-            String address = String.valueOf(sortUploads.getAddress(uploadString));
-            System.out.println(address);
+            String address = String.valueOf(extractDataFromString.getAddress(uploadString));
             try {
                 eventHandler.handle(guiEventFactory.stringEvent("Deletion", "address", address));
             } catch (IOException e) {
@@ -331,7 +330,7 @@ public class SeperateGUI extends Application {
             int selectedProducer = producerListView.getSelectionModel().getSelectedIndex();
             System.out.println(producerListView.getItems().toString());
             String producerString = producerListView.getItems().get(selectedProducer);
-            String producer = sortUploads.getProducerDisplayVersion(producerString);
+            String producer = extractDataFromString.getProducerDisplayVersion(producerString);
             ProducerEvent event = guiEventFactory.producerEvent(producer, "remove");
             try {
                 eventHandler.handle(event);
@@ -344,7 +343,7 @@ public class SeperateGUI extends Application {
             int selectedFile = uploadsListView.getSelectionModel().getSelectedIndex();
             System.out.println(uploadsListView.getItems().toString());
             String uploadString = uploadsListView.getItems().get(selectedFile);
-            String address = String.valueOf(sortUploads.getAddress(uploadString));
+            String address = String.valueOf(extractDataFromString.getAddress(uploadString));
             StringEvent stringEvent = guiEventFactory.stringEvent("Change", "address", address);
             try {
                 eventHandler.handle(stringEvent);

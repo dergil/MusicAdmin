@@ -25,7 +25,7 @@ public class SeperateCLI extends Thread{
         this.sizeObservable = sizeObservable;
         this.tagObservable = tagObservable;
     }
-
+//todo: oberserver sollten nicht automatisch aktiviert sein
     public void run(){
         String clientName = "client1";
         EventHandler clientEventHandler = new EventHandler();
