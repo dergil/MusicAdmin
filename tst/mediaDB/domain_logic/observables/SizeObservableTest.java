@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SizeObservableTest {
     SizeObservable sizeObservable;
-
+//todo todo, also register etc
     @BeforeEach
     void setUp() {
         sizeObservable = new SizeObservable();

@@ -10,7 +10,6 @@ import java.io.IOException;
 public class ConfigMode implements CLIMode {
     String[] splitInput = null;
     String input = null;
-//    TODO: extern initialisieren
     SizeObserver sizeObserver;
     TagObserver tagObserver;
     MediaFileRepository mediaFileRepository;
@@ -19,36 +18,40 @@ public class ConfigMode implements CLIMode {
         this.mediaFileRepository = mediaFileRepository;
     }
 
-    public void start() throws IOException {
+    public boolean start() {
         System.out.println("Classes: SizeObserver, TagObserver");
         System.out.println("add [class name]");
         System.out.println("remove [class name]");
         System.out.println("Zurück: 0");
-//        do {
-            getAndVerifyInput();
-//        } while (!input.equals("0"));
+            return getAndVerifyInput();
     }
 
-    private void getAndVerifyInput() throws IOException {
+    private boolean getAndVerifyInput() {
         input = Console.prompt("Config mode ");
         splitInput = input.split(" ");
         switch (splitInput[0]){
-            case "0":
-                return;
             case "add":
-                if (splitInput[1].equals("SizeObserver"))
+                if (splitInput[1].equals("SizeObserver")){
                     addSizeObserver();
-                else if (splitInput[1].equals("TagObserver"))
+                    return true;
+                }
+                else if (splitInput[1].equals("TagObserver")){
                     addTagObserver();
-                break;
+                    return true;
+                }
+                return false;
             case "remove":
-                if (splitInput[1].equals("SizeObserver"))
+                if (splitInput[1].equals("SizeObserver")){
                     removeSizeObserver();
-                else if (splitInput[1].equals("TagObserver"))
+                    return true;
+                }
+                else if (splitInput[1].equals("TagObserver")){
                     removeTagObserver();
-                break;
+                    return true;
+                }
+                return false;
             default:
-                break;
+                return false;
         }
     }
 

@@ -19,17 +19,19 @@ public class Deserialize {
     ProducerRepository producerRepository;
     AddressRepository addressRepository;
     DeserializeDomainContent deserializeDomainContent;
+    RandomAccess randomAccess;
     ObjectInputStream ois;
 
     public Deserialize(SizeObservable sizeObservable, TagObservable tagObservable, MediaFileRepository mediaFileRepository,
                        ProducerRepository producerRepository, AddressRepository addressRepository,
-                       DeserializeDomainContent deserializeDomainContent) {
+                       DeserializeDomainContent deserializeDomainContent, RandomAccess randomAccess) {
         this.sizeObservable = sizeObservable;
         this.tagObservable = tagObservable;
         this.mediaFileRepository = mediaFileRepository;
         this.producerRepository = producerRepository;
         this.addressRepository = addressRepository;
         this.deserializeDomainContent = deserializeDomainContent;
+        this.randomAccess = randomAccess;
     }
 
     public void deserialize() throws IOException {
@@ -57,6 +59,14 @@ public class Deserialize {
         ois=new ObjectInputStream(new FileInputStream(SerFilenames.ADDRESSESSET.toString()));
         Set<Integer> integerSet = deserializeDomainContent.deserializeIntegerSet(ois);
         addressRepository.setAddresses(integerSet);
+
+        ois=new ObjectInputStream(new FileInputStream(SerFilenames.RANDOMACCESSSAVEDMEDIAFILES.toString()));
+        ArrayList<SavedMediaFile> savedMediaFiles = deserializeDomainContent.deserializeSavedMediaFiles(ois);
+        randomAccess.setSavedMediaFiles(savedMediaFiles);
+
+        ois=new ObjectInputStream(new FileInputStream(SerFilenames.RANDOMACCESSCURRENTOFFSET.toString()));
+        int currentOffset = deserializeDomainContent.deserializeCurrentOffset(ois);
+        randomAccess.setCurrentOffset(currentOffset);
     }
 
     private boolean fileExisting(String address){

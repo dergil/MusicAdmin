@@ -15,7 +15,7 @@ class AddressRepositoryTest {
 
     @Test
     void nextAddressFirst() {
-        assertEquals(0, Integer.parseInt(addressRepository.nextAddress()));
+        assertEquals(1, Integer.parseInt(addressRepository.nextAddress()));
     }
 
     @Test
@@ -23,7 +23,7 @@ class AddressRepositoryTest {
         for (int i = 0; i < 2000; i++) {
             addressRepository.nextAddress();
         }
-        assertEquals(2000, Integer.parseInt(addressRepository.nextAddress()));
+        assertEquals(2001, Integer.parseInt(addressRepository.nextAddress()));
     }
 
 //    void testGetter(Class clazz, String memberName, Object expected){

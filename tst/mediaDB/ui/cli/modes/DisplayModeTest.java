@@ -14,7 +14,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-//TODO: generifizieren
 class DisplayModeTest {
     EventHandler eventHandler;
     EventFactory eventFactoryMock;

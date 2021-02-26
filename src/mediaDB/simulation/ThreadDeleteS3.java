@@ -13,7 +13,6 @@ public class ThreadDeleteS3 extends Thread{
     List<Uploadable> uploadables;
     Uploadable pickedFile;
     int size;
-    int randomInt;
 
 
     public ThreadDeleteS3(MediaFileRepository mediaFileRepository, BlockingQueue queue) {

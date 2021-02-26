@@ -1,6 +1,8 @@
 package mediaDB.IO;
 
-public class SavedMediaFile {
+import java.io.Serializable;
+
+public class SavedMediaFile implements Serializable {
     String fileType;
     String address;
     int size;

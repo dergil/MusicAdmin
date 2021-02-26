@@ -43,7 +43,7 @@ public class PersistenceEventListener implements EventListener<PersistenceEvent>
                 toClient.dataChange();
                 break;
             case "save":
-                if (option != null && Numerical.isNumerical(option)){
+                if (option != null && Numerical.check(option)){
                     if (randomAccess.isEmpty()){
                         saveMediaFileRepositoryInRandomAccessList();
                         return;
@@ -55,7 +55,7 @@ public class PersistenceEventListener implements EventListener<PersistenceEvent>
                 else System.out.println("Syntax error");
                 break;
             case "load":
-                if (option != null && Numerical.isNumerical(option) && !fileExisting(option)){
+                if (option != null && Numerical.check(option) && !fileExisting(option)){
                     try {
                         Uploadable loadedFile = randomAccess.load(option);
                         if (loadedFile != null){

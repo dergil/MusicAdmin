@@ -45,12 +45,12 @@ public class App {
         DisplayModeProcessing displayModeProcessing = new DisplayModeProcessing(generateDisplayContent, producerRepository, mediaFileRepository);
         DisplayEventListener displayEventListener = new DisplayEventListener(displayModeProcessing, mediaFileRepository, toClient);
         StringEventListener stringEventListener = new StringEventListener(mediaFileRepository, producerRepository, toClient);
-        Serialize serialize = new Serialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository);
-        DeserializeDomainContent deserializeDomainContent = new DeserializeDomainContent();
-        Deserialize deserialize = new Deserialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository, deserializeDomainContent);
-        RandomAccessFile randomAccessFile = new RandomAccessFile("RandomAccessFile", "rw");
         ArrayList<SavedMediaFile> savedMediaFiles = new ArrayList<>();
+        RandomAccessFile randomAccessFile = new RandomAccessFile("RandomAccessFile", "rw");
         RandomAccess randomAccess = new RandomAccess(randomAccessFile, savedMediaFiles);
+        Serialize serialize = new Serialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository, randomAccess);
+        DeserializeDomainContent deserializeDomainContent = new DeserializeDomainContent();
+        Deserialize deserialize = new Deserialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository, deserializeDomainContent, randomAccess);
         PersistenceEventListener persistenceEventListener = new PersistenceEventListener(mediaFileRepository, serialize, deserialize, deserializeDomainContent, randomAccess, toClient);
 
         EventBus serverEventBus = new EventBus();

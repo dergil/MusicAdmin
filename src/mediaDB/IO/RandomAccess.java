@@ -10,12 +10,12 @@ import java.util.ArrayList;
     https://stackoverflow.com/questions/2836646/java-serializable-object-to-byte-array
     https://www.javatpoint.com/java-randomaccessfile-class
 */
-
+//todo: getter und setter testen
 public class RandomAccess {
 //    liste von files mit fileType, adresse, größe, offset
-    RandomAccessFile randomAccessFile;
-    ArrayList<SavedMediaFile> savedMediaFiles;
-    int currentOffset = 0;
+    private RandomAccessFile randomAccessFile;
+    private ArrayList<SavedMediaFile> savedMediaFiles;
+    private int currentOffset = 0;
 
     public RandomAccess(RandomAccessFile randomAccessFile, ArrayList<SavedMediaFile> savedMediaFiles) {
         this.randomAccessFile = randomAccessFile;
@@ -68,5 +68,21 @@ public class RandomAccess {
 
     public boolean isEmpty(){
         return savedMediaFiles.isEmpty();
+    }
+
+    public ArrayList<SavedMediaFile> getSavedMediaFiles() {
+        return savedMediaFiles;
+    }
+
+    public void setSavedMediaFiles(ArrayList<SavedMediaFile> savedMediaFiles) {
+        this.savedMediaFiles = savedMediaFiles;
+    }
+
+    public int getCurrentOffset() {
+        return currentOffset;
+    }
+
+    public void setCurrentOffset(int currentOffset) {
+        this.currentOffset = currentOffset;
     }
 }

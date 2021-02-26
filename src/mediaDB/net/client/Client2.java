@@ -17,7 +17,7 @@ public class Client2 {
     public static void main(String[] args) throws IOException {
         try (Socket socket = new Socket("localhost", 7777);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());){
+             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());) {
 
             ClientEventBus clientEventBus = new ClientEventBus(out);
             EventHandler eventHandler = new EventHandler();
@@ -29,30 +29,27 @@ public class Client2 {
             DeletionMode deletionMode = new DeletionMode(eventHandler, eventFactory);
             ChangeMode changeMode = new ChangeMode(eventHandler, eventFactory);
             PersistenceMode persistenceMode = new PersistenceMode(eventHandler, eventFactory);
-            CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode, persistenceMode);
-
-            String marker = "client2";
-            ServerResponseEvent markerEvent = eventFactory.serverResponseEvent("none", marker);
-            out.writeObject(markerEvent);
+            CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode,
+                    persistenceMode, eventHandler, eventFactory);
 
             cliAdmin.start();
 
-            while (true){
+            while (true) {
                 try {
                     while (true) {
                         ServerResponseEvent serverResponseEvent = (ServerResponseEvent) in.readObject();
-                        String response = serverResponseEvent.getEventName();
-                        if (response.equals(marker))
-                            break;
-                        System.out.println(serverResponseEvent.getEventName());
+                        if (serverResponseEvent.getSender().equals(clientName)) {
+                            if (serverResponseEvent.getEventName().equals("done")) {
+                                break;
+                            }
+                            System.out.println(serverResponseEvent.getEventName());
+                        }
                     }
-                }
-                catch (EOFException | ClassNotFoundException e ) {
+                } catch (EOFException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
                 cliAdmin.start();
             }
         }
-
     }
 }

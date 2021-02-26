@@ -1,18 +1,3 @@
-GL
-vollst. CLI
-events
-observer
-mehrere clients
-data binding
-Sim 2&3
-random access
-parallel
-13
-
-
-27 Pkt. in nicht-basis-funktionalität
-
-
 https://github.com/google/guava event sache raussuchen, als quelle angeben
 
 access modifier am Ende überarbeiten
@@ -55,3 +40,27 @@ Finale Aufgaben um Funktionalität zu sichern:
 
 
 listeners.for!!!!!!!!!!!!!!!!!!!!!!!
+
+
+random access file
+muss nach Neustart der app funzen, dass es keine inkonsistenzen gibt
+wenn daten geholt / gespiechert werden, repo layer benutzen
+
+
+checked exceptions = erwartete exc.
+
+current offset rei RAf serialisieren
+
+listener -> eventBus -> serverresponseeventlistener -> net
+
+server muss nach termination von einem client weiter funzen (?)
+
+Einzelne aufgabenblätter lesen
+
+udp buffer size prüfen, ob ausreichend
+
+net Klassen testen?
+
+Was passiert, wenn ein udp client bei einem tcp server versucht zu connecten
+
+sout bei data changed in GL, anstatt observer

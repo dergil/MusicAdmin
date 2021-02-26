@@ -33,7 +33,7 @@ class DisplayEventListenerTest {
     void onMediaEventUploaderToClient() throws IOException {
         setEvent("uploader", null);
         displayEventListener.onMediaEvent(displayEvent);
-        verify(toClient).sendString(any(), anyString());
+        verify(toClient).sendTypedString(any(), anyString(), anyString());
     }
 
     @Test
@@ -47,7 +47,7 @@ class DisplayEventListenerTest {
     void onMediaEventContentToClient() throws IOException {
         setEvent("content", null);
         displayEventListener.onMediaEvent(displayEvent);
-        verify(toClient).sendString(any(), anyString());
+        verify(toClient).sendTypedString(any(), anyString(), anyString());
     }
 
     @Test
@@ -61,7 +61,7 @@ class DisplayEventListenerTest {
     void onMediaEventContentWithTypeToClient() throws IOException {
         setEvent("content", MediaTypes.AUDIO.toString());
         displayEventListener.onMediaEvent(displayEvent);
-        verify(toClient).sendString(any(), anyString());
+        verify(toClient).sendTypedString(any(), anyString(), anyString());
     }
 
     @Test
@@ -75,7 +75,7 @@ class DisplayEventListenerTest {
     void onMediaEventTagToClient() throws IOException {
         setEvent("tag", "i");
         displayEventListener.onMediaEvent(displayEvent);
-        verify(toClient).sendString(any(), anyString());
+        verify(toClient).sendTypedString(any(), anyString(), anyString());
     }
 
     @Test

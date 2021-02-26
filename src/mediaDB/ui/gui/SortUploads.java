@@ -66,31 +66,4 @@ public class SortUploads {
         }
         uploadsListView.setItems(sorted);
     }
-
-//    public String getAddressDisplayVersion(String upload){
-//        String[] uploads = upload.split("\t");
-//        System.out.println(uploads[1]);
-//        return uploads[1];
-//    }
-
-
-
-
-//    public int getAccessCountDisplayVersion(String upload){
-//        String count = upload.split("\t")[3];
-//        System.out.println(count);
-//        return Integer.parseInt(count);
-//    }
-
-
-
-
-//    public String getProducerFromUploadString(String upload){
-//        String producer = upload.split("\t")[2];
-//        System.out.println(producer);
-//        return producer;
-//    }
-
-
-
-}
+    }

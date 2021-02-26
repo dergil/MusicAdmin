@@ -27,24 +27,24 @@ public class ChangeMode implements CLIMode{
         this.eventFactory = eventFactory;
     }
 
-    public void start() throws IOException {
-        System.out.println("[Produzentenname]");
+    public boolean start() throws IOException {
+        System.out.println("[Abrufadresse]");
         System.out.println("Zurück: 0");
-//        do {
-            getAndVerifyInput();
-//        } while (!input.equals("0"));
+            return getAndVerifyInput();
     }
 
-    private void getAndVerifyInput() throws IOException {
+    private boolean getAndVerifyInput() throws IOException {
         input = Console.prompt("Change mode ");
         splitInput = input.split(" ");
         if (splitInput[0].equals("0"))
-            return;
-        if (checkIfNumeric(splitInput[0]))
+            return false;
+        if (checkIfNumeric(splitInput[0])){
             address();
+            return true;
+        }
+        return false;
     }
 
-    //    TODO: testen
     private boolean checkIfNumeric(String input){
         return input.matches("[0-9]+");
     }

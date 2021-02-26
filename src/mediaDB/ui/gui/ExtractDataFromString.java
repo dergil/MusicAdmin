@@ -1,8 +1,5 @@
 package mediaDB.ui.gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.ListView;
 import mediaDB.ui.Numerical;
 
 public class ExtractDataFromString {
@@ -32,7 +29,7 @@ public class ExtractDataFromString {
             currentChar = upload.substring(beginindex, beginindex + 1);
             accessCount = accessCount.concat(currentChar);
             beginindex++;
-        } while (Numerical.isNumerical(currentChar));
+        } while (Numerical.check(currentChar));
         accessCount = accessCount.replaceAll(",", "");
         return Integer.parseInt(accessCount);
     }
@@ -47,7 +44,7 @@ public class ExtractDataFromString {
             currentChar = upload.substring(beginindex, beginindex + 1);
             address = address.concat(currentChar);
             beginindex++;
-        } while (Numerical.isNumerical(currentChar));
+        } while (Numerical.check(currentChar));
         address = address.replaceAll("'", "");
         return Integer.parseInt(address);
     }

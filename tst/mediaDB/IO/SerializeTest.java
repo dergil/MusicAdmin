@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-//TODO: optional um Test der Streams ergänzen
 class SerializeTest {
     SizeObservable sizeObservable;
     TagObservable tagObservable;
@@ -20,6 +19,7 @@ class SerializeTest {
     ProducerRepository producerRepository;
     AddressRepository addressRepository;
     Serialize serialize;
+    RandomAccess randomAccess;
 
     @BeforeEach
     void setUp() {
@@ -28,7 +28,8 @@ class SerializeTest {
         mediaFileRepository = mock(MediaFileRepository.class);
         producerRepository = mock(ProducerRepository.class);
         addressRepository = mock(AddressRepository.class);
-        serialize = new Serialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository);
+        randomAccess = mock(RandomAccess.class);
+        serialize = new Serialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository, randomAccess);
     }
 
     @Test

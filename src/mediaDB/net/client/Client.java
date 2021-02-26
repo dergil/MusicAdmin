@@ -27,8 +27,8 @@ public class Client {
             DeletionMode deletionMode = new DeletionMode(eventHandler, eventFactory);
             ChangeMode changeMode = new ChangeMode(eventHandler, eventFactory);
             PersistenceMode persistenceMode = new PersistenceMode(eventHandler, eventFactory);
-            CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode, persistenceMode);
-
+            CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode,
+                    persistenceMode, eventHandler, eventFactory);
 
             cliAdmin.start();
 
@@ -37,10 +37,10 @@ public class Client {
                     while (true) {
                         ServerResponseEvent serverResponseEvent = (ServerResponseEvent) in.readObject();
                         if (serverResponseEvent.getSender().equals(clientName)){
-                            System.out.println(serverResponseEvent.getEventName());
                             if (serverResponseEvent.getEventName().equals("done")) {
                                 break;
                             }
+                            System.out.println(serverResponseEvent.getEventName());
                         }
                     }
                 }

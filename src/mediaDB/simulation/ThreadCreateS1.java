@@ -12,11 +12,8 @@ import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
 public class ThreadCreateS1 extends Thread {
-    private CountDownLatch doneSignal;
     MediaFileRepository mediaFileRepository;
     ProducerRepository producerRepository;
-
-    int iterations = 0;
     RandomMediadfileInstances randomFiles = new RandomMediadfileInstances();
     Random random = new Random();
     InteractiveVideoFile interactiveVideoFile;
@@ -28,32 +25,11 @@ public class ThreadCreateS1 extends Thread {
         this.producerRepository = producerRepository;
     }
 
-    public ThreadCreateS1(MediaFileRepository mediaFileRepository, int iterations, CountDownLatch doneSignal) {
-        this.mediaFileRepository = mediaFileRepository;
-        this.iterations = iterations;
-        this.doneSignal = doneSignal;
-    }
-
     public void run(){
         producers = randomFiles.getProducers();
         for (Producer producer : producers) {
             producerRepository.addProducer(producer);
         }
-        if (iterations != 0 && doneSignal != null){
-            for (int i = 0; i < iterations; i++) {
-                if (random.nextBoolean()) {
-                    interactiveVideoFile = randomFiles.randomInteractiveVideoFile();
-                    mediaFileRepository.create(interactiveVideoFile);
-                    System.out.println("Tried to add  " + interactiveVideoFile.toString());
-                } else {
-                    licensedAudioVideoFile = randomFiles.randomLicensedAudioVideoFile();
-                    mediaFileRepository.create(licensedAudioVideoFile);
-                    System.out.println("Tried to add  " + licensedAudioVideoFile.toString());
-                }
-            }
-            doneSignal.countDown();
-        }
-        else {
             while (true) {
                     if (random.nextBoolean()) {
                         interactiveVideoFile = randomFiles.randomInteractiveVideoFile();
@@ -64,15 +40,15 @@ public class ThreadCreateS1 extends Thread {
                         mediaFileRepository.create(licensedAudioVideoFile);
                         System.out.println("Tried to add  " + licensedAudioVideoFile.toString());
                     }
-//                try {
-//                    sleep(0);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
 
-    }
+//    }
 

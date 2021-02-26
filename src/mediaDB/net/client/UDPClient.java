@@ -36,29 +36,18 @@ public class UDPClient {
         return port;
     }
 
-//    public void sendEvent(NetworkEvent networkEvent) throws IOException {
-//        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
-//        ObjectOutput oo = new ObjectOutputStream(bStream);
-//        oo.writeObject(networkEvent);
-//        oo.close();
-//
-//        byte[] buf = bStream.toByteArray();
-//        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, port);
-//        socket.send(packet);
-//    }
-
     public void receiveEvent() throws IOException {
         try {
             while (true) {
+//                receive packets until "client" (done) packet arrives
                 byte[] buf = new byte[256];
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
                 byte[] recBytes = packet.getData();
-                ObjectInputStream iStream = new ObjectInputStream(new ByteArrayInputStream(recBytes));
-                NetworkEvent recEvent = (NetworkEvent) iStream.readObject();
-                String response = recEvent.getEventName();
-                System.out.println(recEvent.getEventName());
-                if (response.equals("client")) {
+                ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(recBytes));
+                NetworkEvent recEvent = (NetworkEvent) in.readObject();
+                String eventName = recEvent.getEventName();
+                if (eventName.equals("client")) {
                     break;
                 }
             }
@@ -80,16 +69,12 @@ public class UDPClient {
         DeletionMode deletionMode = new DeletionMode(eventHandler, eventFactory);
         ChangeMode changeMode = new ChangeMode(eventHandler, eventFactory);
         PersistenceMode persistenceMode = new PersistenceMode(eventHandler, eventFactory);
-        CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode, persistenceMode);
+        CLIAdminForNet cliAdmin = new CLIAdminForNet(insertMode, displayMode, deletionMode, changeMode,
+                persistenceMode, eventHandler, eventFactory);
 
         while (true){
             cliAdmin.start();
             udpClient.receiveEvent();
         }
-
-//        CreateServerResponseEvent createServerResponseEvent = new CreateServerResponseEvent();
-//        NetworkEvent testEvent = createServerResponseEvent.process("Test me");
-//        udpClient.sendEvent(testEvent);
     }
-
 }

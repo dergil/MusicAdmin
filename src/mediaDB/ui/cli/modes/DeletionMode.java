@@ -22,32 +22,33 @@ public class DeletionMode implements CLIMode {
         this.eventFactory = eventFactory;
     }
 
-    public void start() throws IOException {
+    public boolean start() throws IOException {
         System.out.println("[Produzentenname]");
         System.out.println("[Abrufadresse]");
         System.out.println("Zurück: 0");
-//        do {
-            getAndVerifyInput();
-//        } while (!input.equals("0"));
+            return getAndVerifyInput();
     }
 
-    private void getAndVerifyInput() throws IOException {
+    private boolean getAndVerifyInput() throws IOException {
         input = Console.prompt("Deletion mode ");
         splitInput = input.split(" ");
         if (splitInput[0].equals("0"))
-            return;
-        if (checkIfNumeric(splitInput[0]))
+            return false;
+        if (checkIfNumeric(splitInput[0])){
             address();
-        else producer();
+            return true;
+        }
+        else {
+            producer();
+            return true;
+        }
 
     }
 
-    //    TODO: testen
     private boolean checkIfNumeric(String input){
         return input.matches("[0-9]+");
     }
 
-//    TODO: mit producerevent ersetzen
     private void address() throws IOException {
         StringEvent stringEvent = eventFactory.stringEvent("Deletion", "address", splitInput[0]);
         eventHandler.handle(stringEvent);

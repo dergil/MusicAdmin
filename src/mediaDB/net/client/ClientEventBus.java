@@ -21,7 +21,7 @@ public class ClientEventBus implements EventListener<NetworkEvent> {
 //    }
 
     @Override
-    public void onMediaEvent(NetworkEvent event) throws IOException {
+    public void onMediaEvent(NetworkEvent event) {
         try {
             out.writeObject(event);
         } catch (IOException e){

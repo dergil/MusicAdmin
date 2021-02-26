@@ -8,11 +8,11 @@ class NumericalTest {
 
     @Test
     void isNumericalTrue() {
-        assertTrue(Numerical.isNumerical("100100"));
+        assertTrue(Numerical.check("100100"));
     }
 
     @Test
     void isNumericalFals() {
-        assertFalse(Numerical.isNumerical("100100a"));
+        assertFalse(Numerical.check("100100a"));
     }
 }

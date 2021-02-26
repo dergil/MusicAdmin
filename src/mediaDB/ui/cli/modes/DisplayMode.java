@@ -14,8 +14,6 @@ public class DisplayMode implements CLIMode {
     EventListener<NetworkEvent> serverEventBus;
     EventHandler eventHandler;
     EventFactory eventFactory;
-//    TODO: input verifikation (2 args etc.)
-    String mediaTypes = MediaTypes.ALL_TYPES.toString();
     String input;
     String[] splitInput = null;
 
@@ -24,31 +22,33 @@ public class DisplayMode implements CLIMode {
         this.eventFactory = eventFactory;
     }
 
-    public void start() throws IOException {
+    public boolean start() throws IOException {
         System.out.println("uploader");
         System.out.println("content [[Typ]]");
         System.out.println("tag [enthalten (i) / nicht enthalten (e)]");
         System.out.println("Zurück: 0");
-//        do {
-            getAndVerifyInput();
-//        } while (!input.equals("0")) ;
+            return getAndVerifyInput();
     }
 
-    private void getAndVerifyInput() throws IOException {
+    private boolean getAndVerifyInput() throws IOException {
         input = Console.prompt("Display mode ");
-      splitInput = input.split(" ");
+        splitInput = input.split(" ");
         if (splitInput[0].equals("content")) {
             contentDisplay();
-            return;
+            return true;
         }
         if (splitInput[0].equals("uploader")) {
             uploaderDisplay();
-            return;
+            return true;
         }
         if (splitInput[0].equals("tag")) {
             tagDisplay();
+            return true;
         }
-        else System.out.println("Syntax error.");
+        else {
+            System.out.println("Syntax error.");
+            return false;
+        }
     }
 
     private void contentDisplay() throws IOException {
@@ -72,7 +72,10 @@ public class DisplayMode implements CLIMode {
         if (splitInput.length > 1 && (splitInput[1].equals("i") || splitInput[1].equals("e"))){
             event = eventFactory.displayEvent( "tag", splitInput[1]);
             eventHandler.handle(event);
-        } else System.out.println("Syntax error.");
+        } else {
+            System.out.println("Syntax error.");
+            start();
+        }
     }
 
     private boolean validMediaType(String input){

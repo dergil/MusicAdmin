@@ -9,6 +9,7 @@ import mediaDB.domain_logic.producer.Uploader;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -19,18 +20,18 @@ public class Serialize {
     MediaFileRepository mediaFileRepository;
     ProducerRepository producerRepository;
     AddressRepository addressRepository;
+    RandomAccess randomAccess;
 
-    public Serialize(SizeObservable sizeObservable, TagObservable tagObservable,
-                     MediaFileRepository mediaFileRepository, ProducerRepository producerRepository,
-                     AddressRepository addressRepository) {
+    public Serialize(SizeObservable sizeObservable, TagObservable tagObservable, MediaFileRepository mediaFileRepository,
+                     ProducerRepository producerRepository, AddressRepository addressRepository, RandomAccess randomAccess) {
         this.sizeObservable = sizeObservable;
         this.tagObservable = tagObservable;
         this.mediaFileRepository = mediaFileRepository;
         this.producerRepository = producerRepository;
         this.addressRepository = addressRepository;
+        this.randomAccess = randomAccess;
     }
 
-//    TODO: observerlisten werden nicht serialisiert, ist das richtig so?
     public void serialize(){
 
         BigDecimal currentSize = sizeObservable.getCurrentSize();
@@ -47,6 +48,12 @@ public class Serialize {
 
         Collection<Integer> integerCollection = addressRepository.getAddresses();
         serializeObject((Serializable) integerCollection, SerFilenames.ADDRESSESSET.toString());
+
+        ArrayList<SavedMediaFile> savedMediaFiles = randomAccess.getSavedMediaFiles();
+        serializeObject((Serializable) savedMediaFiles, SerFilenames.RANDOMACCESSSAVEDMEDIAFILES.toString());
+
+        int currentOffset = randomAccess.getCurrentOffset();
+        serializeObject((Serializable) currentOffset, SerFilenames.RANDOMACCESSCURRENTOFFSET.toString());
     }
 
     private void serializeObject (Serializable object, String filename){

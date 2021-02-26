@@ -16,10 +16,8 @@ import java.util.List;
 
 public class MediaFileRepository {
     ToClientMessenger toClient;
-//    TODO: nullpointer, when MAX_CAPACITY is set via constructor
     private SizeObservable sizeObservable;
     private TagObservable tagObservable;
-    private UploadsObservable uploadsObservable;
     List<Uploadable> mediaFiles = Collections.synchronizedList(new ArrayList<>());
 
     public MediaFileRepository(ToClientMessenger toClient, SizeObservable sizeObservable, TagObservable tagObservable) {
@@ -85,30 +83,18 @@ public class MediaFileRepository {
             content.setAccessCount(content.getAccessCount() + 1);
             changeInUploads("Access count changed", address);
         }
-//        TODO: antwort geben?
-//        else toClient.fileNotListet();
     }
 
-//    TODO: call by value, call by reference? (testen)
     public synchronized void incrementAccessCount(Uploadable file) {
         if (contains(file)){
             Content content = ((Content)file);
             content.setAccessCount(content.getAccessCount() + 1);
             changeInUploads("Access count changed", ((Content) file).getAddress());
         }
-//        else toClient.fileNotListet();
-    }
-
-    public synchronized void incrementAccessCountForList(List<Uploadable> list) {
-        for (Uploadable uploadable : list){
-            incrementAccessCount(uploadable);
-        }
-//        changeInUploads();
     }
 
     private synchronized void changeInUploads(String type, String address){
-//        if (uploadsObservable != null)
-//            uploadsObservable.change(type, address);
+        System.out.println(type + " " + findByAddress(address).toString());
     }
 
     public TagObservable getTagObservable() {
@@ -117,13 +103,5 @@ public class MediaFileRepository {
 
     public SizeObservable getSizeObservable() {
         return sizeObservable;
-    }
-
-    public void setMediaFiles(List<Uploadable> mediaFiles) {
-        this.mediaFiles = mediaFiles;
-    }
-
-    public void setUploadsObservable(UploadsObservable uploadsObservable) {
-        this.uploadsObservable = uploadsObservable;
     }
 }

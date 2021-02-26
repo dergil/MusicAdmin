@@ -21,27 +21,29 @@ public class PersistenceMode implements CLIMode {
         this.eventFactory = eventFactory;
     }
 
-    public void start() throws IOException {
+    public boolean start() throws IOException {
         System.out.println(
                 "saveJOS\n" +
                 "loadJOS\n" +
                 "save [Abrufadresse]\n" +
-                "load [Abrufadresse]\n");
-
-//        do {
-        getAndVerifyInput();
-//        } while (!input.equals("0")) ;
+                "load [Abrufadresse]\n" +
+                "Zurück: 0 \n");
+        return getAndVerifyInput();
     }
 
-    private void getAndVerifyInput() throws IOException {
+    private boolean getAndVerifyInput() throws IOException {
         input = Console.prompt("Persistence mode ");
         splitInput = input.split(" ");
         String command = splitInput[0];
         if (command.equals("saveJOS") || command.equals("loadJOS") || command.equals("save") || command.equals("load")){
             PersistenceEvent persistenceEvent = eventFactory.persistenceEvent(command, option(splitInput));
             eventHandler.handle(persistenceEvent);
+            return true;
         }
-        else System.out.println("Syntax error");
+        else {
+            System.out.println("Syntax error");
+            return false;
+        }
     }
 
     private String option(String[] splitInput){

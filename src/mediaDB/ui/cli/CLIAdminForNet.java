@@ -1,5 +1,7 @@
 package mediaDB.ui.cli;
 
+import mediaDB.routing.EventHandler;
+import mediaDB.routing.events.misc.ServerResponseEvent;
 import mediaDB.ui.cli.modes.*;
 
 import java.io.IOException;
@@ -10,50 +12,53 @@ public class CLIAdminForNet {
     DeletionMode deleteMode;
     ChangeMode changeMode;
     PersistenceMode persistenceMode;
+    EventHandler eventHandler;
+    EventFactory eventFactory;
 
-
-    public CLIAdminForNet(InsertMode insertMode, DisplayMode displayMode, DeletionMode deleteMode, ChangeMode changeMode, PersistenceMode persistenceMode) {
+    public CLIAdminForNet(InsertMode insertMode, DisplayMode displayMode, DeletionMode deleteMode, ChangeMode changeMode,
+                          PersistenceMode persistenceMode, EventHandler eventHandler, EventFactory eventFactory) {
         this.insertMode = insertMode;
         this.displayMode = displayMode;
         this.deleteMode = deleteMode;
         this.changeMode = changeMode;
         this.persistenceMode = persistenceMode;
+        this.eventHandler = eventHandler;
+        this.eventFactory = eventFactory;
     }
 
-    public void start() throws IOException {
-//        Console.greeting();
+    public boolean start() throws IOException {
         String input;
-//        while (true){
+        while (true){
             input = Console.getMode();
             String firstChar = String.valueOf(input.charAt(0));
-            if (firstChar.equals(":"))
-                modes(input);
-            else if (firstChar.equals("0"))
+            if (firstChar.equals(":")){
+                return modes(input);
+//                if (modes(input))
+//                    return;
+            }
+            else if (firstChar.equals("0")){
+                eventHandler.handle(eventFactory.exitEvent());
                 System.exit(0);
+            }
             else System.out.println("Unknown command");
-//        }
+        }
     }
 
-    private void modes(String mode) throws IOException {
+    private boolean modes(String mode) throws IOException {
         switch (mode){
             case ":c":
-                insertMode.start();
-                break;
+                return insertMode.start();
             case ":d":
-                deleteMode.start();
-                break;
+                return deleteMode.start();
             case ":r":
-                displayMode.start();
-                break;
+                return displayMode.start();
             case ":u":
-                changeMode.start();
-                break;
+                return changeMode.start();
             case ":p":
-                    persistenceMode.start();
-                break;
+                return persistenceMode.start();
             default:
                 System.out.println("Unknown mode.");
-                break;
+                return false;
         }
     }
 

@@ -36,7 +36,6 @@ public class StringEventListener implements EventListener<StringEvent> {
                 }
                 break;
             case "Change":
-//                TODO: right type?
                 mediaFileRepository.incrementAccessCount(event.getOption());
                 toClientMessenger.dataChange();
                 break;

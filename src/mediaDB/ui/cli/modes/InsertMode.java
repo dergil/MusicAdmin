@@ -11,6 +11,8 @@ import mediaDB.ui.cli.EventFactory;
 
 import java.io.IOException;
 
+//todo: bei modes gucken, dass falscher input nicht zu Fehler führt
+//todo: start() z.B. boolean returnen lassen. Falls false, nochmal laufen lassen
 public class InsertMode implements CLIMode {
     String mediaTypes = MediaTypes.ALL_TYPES.toString();
     String[] splitInput = null;
@@ -29,7 +31,7 @@ public class InsertMode implements CLIMode {
 //    hier verarbeiten
 
 
-    public void start() throws IOException {
+    public boolean start() throws IOException {
         System.out.println("Produzent: [Produzentenname]");
         System.out.println("Mediendatei: [Media-Typ] [Produzentenname] [kommaseparierte" +
                 "Tags, einzelnes Komma für keine] [Bitrate] [Länge]\n" +
@@ -37,29 +39,28 @@ public class InsertMode implements CLIMode {
                 "[Interaktionstyp] [Lizenzsgeber]]");
         System.out.println("Zurück: 0");
 
-//        do {
-            getAndVerifyInput();
-//        } while (!input.equals("0"));
+            return getAndVerifyInput();
     }
 
-//    TODO: eigene Klasse, damit Methode nicht public sein muss
-    private void getAndVerifyInput() throws IOException {
+    private boolean getAndVerifyInput() throws IOException {
         input = Console.prompt("Insertion mode ");
         splitInput = input.split(" ");
         if (splitInput[0].equals("0"))
-            return;
+            return false;
         if (checkForSpace())
-            return;
-//            continue;
+            return false;
         if (checkIfProducer()){
             producer(splitInput[0]);
-            return;
-//            continue;
+            return true;
         }
         if (checkIfValidMediafile()){
             mediaFile(splitInput);
+            return true;
         }
-        else System.out.println("Syntax error. Bitrate, Länge, Höhe, Breite und Samplingrate müssen numerisch sein.");
+        else {
+            System.out.println("Syntax error. Bitrate, Länge, Höhe, Breite und Samplingrate müssen numerisch sein.");
+            return false;
+        }
     }
 
     private boolean checkIfValidMediafile() {
@@ -71,7 +72,6 @@ public class InsertMode implements CLIMode {
     }
 
     private boolean validSpecificMediaFile(){
-//        TODO: MediaTypes nehmen?
         switch (splitInput[0]){
             case "Audio":
                 return validAudioFile();
@@ -151,7 +151,6 @@ public class InsertMode implements CLIMode {
         }
     }
 
-//    TODO: testen
     private boolean checkIfNumeric(String input){
         return input.matches("[0-9]+");
     }

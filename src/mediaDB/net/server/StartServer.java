@@ -16,7 +16,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class StartServer {
-//TODO: server sendet nachrichten an alle clients, zu lösen via Kommunikationsklasse? Eine art state
     public static void main(String[] args) {
         ToClientMessenger toClient= new ToClientMessenger();
         SizeObservable sizeObservable = new SizeObservable();
@@ -49,12 +48,8 @@ public class StartServer {
         eventBus.register(displayEventListener);
         eventBus.register(stringEventListener);
 
-        try (ServerSocket ss = new ServerSocket(7777);) {
-//            server.executeSession(); blocks; unblocks after Excpetion in Server class, which exits while loop there
-//            reason: server lacks multiple threads
+        try (ServerSocket ss = new ServerSocket(7777)) {
             while (true){
-
-
                 Socket socket = ss.accept();
                 Server server = new Server(socket, eventBus, toClient);
                 System.out.println("new client@"+socket.getInetAddress()+":"+socket.getPort());

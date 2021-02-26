@@ -26,6 +26,7 @@ class DeserializeTest {
     DeserializeDomainContent deserializeDomainContent;
     Deserialize deserialize;
     ObjectInputStream ois;
+    RandomAccess randomAccess;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +36,8 @@ class DeserializeTest {
         producerRepository = mock(ProducerRepository.class);
         addressRepository = mock(AddressRepository.class);
         deserializeDomainContent = mock(DeserializeDomainContent.class);
-        deserialize = new Deserialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository, deserializeDomainContent);
+        randomAccess = mock(RandomAccess.class);
+        deserialize = new Deserialize(sizeObservable, tagObservable, mediaFileRepository, producerRepository, addressRepository, deserializeDomainContent, randomAccess);
     }
 
     @Test

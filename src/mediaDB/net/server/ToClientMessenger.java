@@ -17,24 +17,13 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: multiple outputstreams and setOut() for multiple clients?
 public class ToClientMessenger {
     List<ObjectOutputStream> outputStreamList = new ArrayList<>();
     int clientPort = Integer.MAX_VALUE;
     private DatagramSocket socket;
     InetAddress address;
-//    boolean gui = false;
     String type = "none";
     EventListener<ServerResponseEvent> eventEventListener;
-
-//    public void producerNotListet(String sender) throws IOException {
-//        sendMessage("Produzent der Datei nicht gelistet.", sender);
-//    }
-//
-//    public void fileNotListet(String sender) throws IOException {
-//        sendMessage("Datei nicht gelistet.", sender);
-//    }
-
 
     public void list(String list, String sender) throws IOException {
         sendMessage(list, sender);
@@ -114,6 +103,10 @@ public class ToClientMessenger {
         outputStreamList.add(out);
     }
 
+    public void removeOut(ObjectOutputStream out) {
+        outputStreamList.remove(out);
+    }
+
     public void setClientPort(int clientPort) {
         this.clientPort = clientPort;
     }
@@ -125,11 +118,6 @@ public class ToClientMessenger {
     public void setAddress(InetAddress address) {
         this.address = address;
     }
-
-//    public void setGUI(){
-//        gui = true;
-//    }
-
 
     public void setEventEventListener(EventListener<ServerResponseEvent> eventEventListener) {
         this.eventEventListener = eventEventListener;

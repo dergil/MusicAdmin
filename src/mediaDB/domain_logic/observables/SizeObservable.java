@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
-//TODO: calculate size here?
 public class SizeObservable extends Observable implements Serializable {
     private List<Observer> observerList = new LinkedList<>();
     BigDecimal MAX_CAPACITY = new BigDecimal(170000000L);

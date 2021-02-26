@@ -22,7 +22,7 @@ public class InteractiveVideoEventListener implements EventListener<InteractiveV
     }
 
     @Override
-    public void onMediaEvent(InteractiveVideoEvent event) throws IOException {
+    public void onMediaEvent(InteractiveVideoEvent event) {
         Uploader uploader = new Producer(event.getUploader());
         BigDecimal size = new BigDecimal(event.getLength().getSeconds() * event.getBitrate());
         boolean capacity = mediaFileRepository.capacityAvailable(size);

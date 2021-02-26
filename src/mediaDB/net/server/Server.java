@@ -25,32 +25,25 @@ public class Server implements Runnable{
     public void run() {
         try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
             try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+                toClientMessenger.setOut(out);
 
-
-                executeSession(in, out);
-
-
+                NetworkEvent receivedEvent;
+                while (true) {
+                    receivedEvent = (NetworkEvent) in.readObject();
+                    System.out.println("event received");
+                    if (receivedEvent.getEventName().equals("ExitEvent")){
+                        toClientMessenger.removeOut(out);
+                        socket.close();
+                        return;
+                    }
+                    eventBus.onMediaEvent(receivedEvent);
+                    toClientMessenger.sendString("done", receivedEvent.getSender());
+                }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void executeSession(ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException {
-//                serverEventBus.setOut(out);
-        toClientMessenger.setOut(out);
-
-        NetworkEvent receivedEvent;
-//        receivedEvent = (ServerResponseEvent) in.readObject();
-//        String senderName = "server";
-        while (true) {
-            System.out.println("start of server while loop");
-            receivedEvent = (NetworkEvent) in.readObject();
-            System.out.println("event received");
-            eventBus.onMediaEvent(receivedEvent);
-            toClientMessenger.sendString("done", receivedEvent.getSender());
         }
     }
 }

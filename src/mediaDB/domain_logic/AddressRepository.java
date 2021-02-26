@@ -7,8 +7,7 @@ import java.util.Set;
 public class AddressRepository {
     private Set<Integer> addresses = Collections.synchronizedSet(new LinkedHashSet<>());
 
-    //    TODO: Thread safety?
-    public String  nextAddress(){
+    public synchronized String  nextAddress(){
         if (addresses.isEmpty()) {
             addresses.add(1);
             return "1";

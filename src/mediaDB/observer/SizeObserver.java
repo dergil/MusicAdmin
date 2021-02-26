@@ -4,7 +4,6 @@ import mediaDB.domain_logic.observables.SizeObservable;
 
 import java.math.BigDecimal;
 
-//TODO: observation printed twice?
 public class SizeObserver implements Observer {
     private SizeObservable sizeObservable;
     private BigDecimal MAX_CAPACITY;

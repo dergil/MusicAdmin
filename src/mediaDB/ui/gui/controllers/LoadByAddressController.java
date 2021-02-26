@@ -14,7 +14,6 @@ public class LoadByAddressController {
     EventFactory eventFactory;
     EventHandler eventHandler;
 
-//    TODO: update uploads after execution
     public LoadByAddressController(EventFactory eventFactory, EventHandler eventHandler) {
         this.eventFactory = eventFactory;
         this.eventHandler = eventHandler;

@@ -32,15 +32,6 @@ public class DeserializeDomainContent {
         return null;
     }
 
-//    public List<Observer> deserializeObserverList(String filename){
-//        try (ObjectInputStream ois=new ObjectInputStream(new FileInputStream(filename))){
-//            return (List<Observer>)ois.readObject();
-//        } catch (ClassNotFoundException | IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
 
     public Map<String , Integer> deserializeStringIntegerMap(ObjectInputStream ois){
         try {
@@ -67,5 +58,23 @@ public class DeserializeDomainContent {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public ArrayList<SavedMediaFile> deserializeSavedMediaFiles(ObjectInputStream ois){
+        try {
+            return (ArrayList<SavedMediaFile>) ois.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int deserializeCurrentOffset(ObjectInputStream ois){
+        try {
+            return (int) ois.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

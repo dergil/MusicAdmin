@@ -47,7 +47,6 @@ public class DisplayModeProcessing {
     }
 
     public String tag(String assigned){
-        //    TODO: possibly implement EnumSet
         if (assigned.equals("i")){
             return assignedTags().toString();
         } else if (assigned.equals("e")){
@@ -56,7 +55,6 @@ public class DisplayModeProcessing {
         else throw new IllegalArgumentException("Argument must be i or e");
     }
 
-    //    TODO: possibly implement EnumSet
     private Set<Tag> assignedTags(){
         List<Uploadable> files = mediaFileRepository.read();
         Set<Tag> tags = new HashSet<>();

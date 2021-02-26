@@ -76,16 +76,6 @@ class DeletionModeTest {
         }
     }
 
-//    TODO: Vill fragen
-//    private void eventSent(CLIMode cliMode, NetworkEvent event, String input){
-//        try (MockedStatic<mediaDB.ui.cli.Console> console = mockStatic(mediaDB.ui.cli.Console.class)) {
-//            console.when(() -> Console.prompt(anyString())).thenReturn("123");
-//            cliMode.start();
-//            verify(eventBusMock).handle(event.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
 
     }

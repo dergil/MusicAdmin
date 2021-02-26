@@ -16,16 +16,12 @@ import java.io.IOException;
 public class SeperateCLI extends Thread{
     EventBus serverEventBus;
     MediaFileRepository mediaFileRepository;
-    SizeObservable sizeObservable;
-    TagObservable tagObservable;
 
-    public SeperateCLI (EventBus serverEventBus, MediaFileRepository mediaFileRepository, SizeObservable sizeObservable, TagObservable tagObservable){
+    public SeperateCLI (EventBus serverEventBus, MediaFileRepository mediaFileRepository){
         this.serverEventBus = serverEventBus;
         this.mediaFileRepository = mediaFileRepository;
-        this.sizeObservable = sizeObservable;
-        this.tagObservable = tagObservable;
     }
-//todo: oberserver sollten nicht automatisch aktiviert sein
+
     public void run(){
         String clientName = "client1";
         EventHandler clientEventHandler = new EventHandler();
@@ -38,11 +34,6 @@ public class SeperateCLI extends Thread{
         ConfigMode configMode = new ConfigMode(mediaFileRepository);
         PersistenceMode persistenceMode = new PersistenceMode(clientEventHandler, eventFactory);
         CLIAdmin cliAdmin = new CLIAdmin(insertMode, displayMode, deletionMode, changeMode, configMode, persistenceMode);
-        //        Observers
-        SizeObserver sizeObserver = new SizeObserver(sizeObservable);
-        sizeObservable.register(sizeObserver);
-        TagObserver tagObserver = new TagObserver(tagObservable);
-        tagObservable.register(tagObserver);
         try {
             cliAdmin.start();
         } catch (IOException e) {
