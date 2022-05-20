@@ -1,4 +1,12 @@
-Die Kapazität kann nur auf der Serverseite festgelegt werden,
-da sonst ein zweiter client die Kapazität auch für den Ersten ändern könnte.
+Administration of metadata for media files
 
-Das feature Multiple Clients wurde für TCP implementiert
+Architecture:
+MVC
+Observer +  event design pattern
+
+Features:
+CRUD of media file data
+TCP+UDP Client/Server
+Persistance 
+JavaFX GUI
+Thread-safety
